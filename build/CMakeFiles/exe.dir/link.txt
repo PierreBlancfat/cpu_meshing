@@ -1,0 +1,1 @@
+/usr/bin/c++    -rdynamic CMakeFiles/exe.dir/src/meshing.cpp.o  -o ../bin/exe  -L/home/polo/work/siam/GPU/gpu_project/sfml/sfmlbuild/lib 
