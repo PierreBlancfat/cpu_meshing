@@ -1,6 +1,32 @@
 #include <meshing.h>
 #include <vector>
 
+void draw_point(sf::RenderWindow &window, int x, int y){
+    sf::RectangleShape s{sf::Vector2f(4, 4)};
+    s.setPosition(static_cast<float>(x), static_cast<float>(y));
+    window.draw(s);
+}
+
+
+
+void draw_line(sf::RenderWindow &window, int x1, int y1, int x2, int y2){
+    sf::Vertex line[2];
+    line[0].position = sf::Vector2f(x1, y1);
+    line[0].color  = sf::Color::Red;
+    line[1].position = sf::Vector2f(x2, y2);
+    line[1].color = sf::Color::Red;
+    window.draw(line, 2, sf::Lines);
+}
+
+
+void draw_points(sf::RenderWindow &window, MatrixXd points){
+    std::cout << points.rows() << std::endl;
+    for(int i = 0; i < points.rows(); i++){
+        draw_point(window, points(i,0), points(i,1));
+    }
+}
+
+
 int main(int argc, char **argv){
 
     int numberPoints = 40;
@@ -13,31 +39,19 @@ int main(int argc, char **argv){
 	std::uniform_real_distribution<double> dist_w(0, 800);
 	std::uniform_real_distribution<double> dist_h(0, 800);
 
-    MatrixXd point = MatrixXd::Random(2,1000)*800;
+    MatrixXd point = MatrixXd::Random(100,2)*800;
     point = point.array().abs();
 
     sf::RenderWindow window(sf::VideoMode(800, 600), "Delaunay triangulation");
     window.setFramerateLimit(1);
 
-    // Transform each points of each vector as a rectangle
-    for(int i = 0; i < 100; i++){
-        sf::RectangleShape s{sf::Vector2f(4, 4)};
-        s.setPosition(static_cast<float>(point(0,i)), static_cast<float>(point(1,i)));
-        window.draw(s);
-    }
 
-    // std::vector<std::array<sf::Vertex, 2> > lines;
-	// for(const auto &e : edges) {
-	// 	const std::array<sf::Vertex, 2> line{{
-	// 		sf::Vertex(sf::Vector2f(
-	// 				static_cast<float>(e.v->x + 2.),
-	// 				static_cast<float>(e.v->y + 2.))),
-	// 		sf::Vertex(sf::Vector2f(
-	// 				static_cast<float>(e.w->x + 2.),
-	// 				static_cast<float>(e.w->y + 2.))),
-	// 	}};
-	// 	window.draw(std::data(line), 2, sf::Lines);
-	// }
+    draw_point(window, 400,400);
+    draw_point(window, 200,400);
+    draw_point(window, 200,400);
+    draw_line(window, 100,0,300,400);
+    draw_points(window, point);
+
 
 	window.display();
 

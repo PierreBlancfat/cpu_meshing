@@ -17,7 +17,7 @@ class IcoSphere
 {
   public:
     IcoSphere(unsigned int levels=1);
-    const std::vector<Eigen::Vector3f>& vertices() const { return mVertices; }
+    const std::vector<Eigen::Vector3f>& sf::Vertex vertex(sf::Vector2f(10.f, 50.f), sf::Color::Red, sf::Vector2f(100.f, 100.f));vertices() const { return mVertices; }
     const std::vector<int>& indices(int level) const;
     void draw(int level);
   protected:
