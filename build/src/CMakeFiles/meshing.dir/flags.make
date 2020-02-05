@@ -6,5 +6,5 @@ CXX_FLAGS =
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/usr/include/eigen3 -I/home/polo/work/siam/GPU/gpu_project/sfml/sfmlbuild/include -I/home/polo/work/siam/GPU/gpu_project/include 
+CXX_INCLUDES = -I/usr/include/eigen3 -I/home/polo/work/siam/GPU/gpu_project/./SFML/include -I/home/polo/work/siam/GPU/gpu_project/include -isystem /usr/local/include 
 

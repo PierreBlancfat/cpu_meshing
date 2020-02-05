@@ -111,44 +111,17 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named exe
+# Target rules for targets named meshing
 
 # Build rule for target.
-exe: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 exe
-.PHONY : exe
+meshing: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 meshing
+.PHONY : meshing
 
 # fast build rule for target.
-exe/fast:
-	$(MAKE) -f CMakeFiles/exe.dir/build.make CMakeFiles/exe.dir/build
-.PHONY : exe/fast
-
-src/meshing.o: src/meshing.cpp.o
-
-.PHONY : src/meshing.o
-
-# target to build an object file
-src/meshing.cpp.o:
-	$(MAKE) -f CMakeFiles/exe.dir/build.make CMakeFiles/exe.dir/src/meshing.cpp.o
-.PHONY : src/meshing.cpp.o
-
-src/meshing.i: src/meshing.cpp.i
-
-.PHONY : src/meshing.i
-
-# target to preprocess a source file
-src/meshing.cpp.i:
-	$(MAKE) -f CMakeFiles/exe.dir/build.make CMakeFiles/exe.dir/src/meshing.cpp.i
-.PHONY : src/meshing.cpp.i
-
-src/meshing.s: src/meshing.cpp.s
-
-.PHONY : src/meshing.s
-
-# target to generate assembly for a file
-src/meshing.cpp.s:
-	$(MAKE) -f CMakeFiles/exe.dir/build.make CMakeFiles/exe.dir/src/meshing.cpp.s
-.PHONY : src/meshing.cpp.s
+meshing/fast:
+	$(MAKE) -f src/CMakeFiles/meshing.dir/build.make src/CMakeFiles/meshing.dir/build
+.PHONY : meshing/fast
 
 # Help Target
 help:
@@ -157,11 +130,8 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... rebuild_cache"
-	@echo "... exe"
 	@echo "... edit_cache"
-	@echo "... src/meshing.o"
-	@echo "... src/meshing.i"
-	@echo "... src/meshing.s"
+	@echo "... meshing"
 .PHONY : help
 
 

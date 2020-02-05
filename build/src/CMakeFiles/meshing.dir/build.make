@@ -79,6 +79,9 @@ meshing_EXTERNAL_OBJECTS =
 
 ../bin/meshing: src/CMakeFiles/meshing.dir/meshing.cpp.o
 ../bin/meshing: src/CMakeFiles/meshing.dir/build.make
+../bin/meshing: /usr/local/lib/libsfml-graphics.so.2.5.1
+../bin/meshing: /usr/local/lib/libsfml-window.so.2.5.1
+../bin/meshing: /usr/local/lib/libsfml-system.so.2.5.1
 ../bin/meshing: src/CMakeFiles/meshing.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/polo/work/siam/GPU/gpu_project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable ../../bin/meshing"
 	cd /home/polo/work/siam/GPU/gpu_project/build/src && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/meshing.dir/link.txt --verbose=$(VERBOSE)
