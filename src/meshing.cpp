@@ -12,33 +12,48 @@ Meshing::Meshing(int witdh, int height, sf::RenderWindow  *win ){
     points_eigen = points_eigen.array().abs();
 
     for(int i = 0; i < points_eigen.rows(); i++){
-        points.push_back(Point(points_eigen(i,0), points_eigen(i,1)));
+        points.push_back(Point(points_eigen(i,0), points_eigen(i,1), i));
     }
 }
 
 
 int Meshing::triangulation(){
-    vector<Point> proj(points.size());
-    proj = copy(points.begin(), points.end(), proj.begin());
-    // median
-    float median_x =  x_coord.mean(); // TODO really take median !!!
+    // copy vector
+    vector<Point> proj;
+    // find median
+    std::vector<float> xcoord;
+    for (int i=0; i<points.size(); i++){
+        xcoord.push_back(points[i].x);
+     }
+    int n = sizeof(xcoord)/sizeof(xcoord[0]); 
+    sort(xcoord.begin(),  xcoord.end());
+    float median  = xcoord[xcoord.size()/2];
+    
     //3d projection
-    MatrixXd proj(points.rows(), 2);
-    for(int i = 0; i < points.rows(); i++){
-        proj(i,0) = points(i,0);
-        proj(i,1) = pow(points(i,0)-median_x, 2) + pow(points(i,1),2);
+    vector<Point> hull;
+    for(int i = 0; i < points.size(); i++){
+        proj.push_back(Point(points[i].y,pow(points[i].x-median, 2) + pow(points[i].y,2), points[i].index));
     }
-    std::cout << proj << std::endl;
-    return points;
+    // delauney path :
+    hull = quickHull(proj);
+    for (int i = 0; i < hull.size(); i++ ){
+        int index = hull[i].index;
+        draw_point( points[index].x, points[index].y, sf::Color::Red);
+    }
 }
 
 
-void Meshing::draw_point(int x, int y){
+void Meshing::draw_point(int x, int y, sf::Color color){
     sf::RectangleShape s{sf::Vector2f(4, 4)};
     s.setPosition(static_cast<float>(x), static_cast<float>(y));
+    s.setFillColor(color);
     window->draw(s);
 }
-
+void Meshing::draw_points(vector<Point> p, sf::Color color){
+    for(int i = 0; i < p.size(); i++){
+        draw_point(p[i].x, p[i].y, color);
+    }
+}
 
 void Meshing::draw_points(){
     for(int i = 0; i < points.size(); i++){
@@ -73,20 +88,19 @@ int main(int argc, char **argv){
     Meshing mesh = Meshing(800, 800, &window);
     mesh.draw_points();
 
-    // triangulation(points);
-    convex_hull(points);
+    mesh.triangulation();
 
 	window.display();
 
-	// while (window.isOpen())
-	// {
-	// 	sf::Event event;
-	// 	while (window.pollEvent(event))
-	// 	{
-	// 		if (event.type == sf::Event::Closed)
-	// 			window.close();
-	// 	}
-	// }
+	while (window.isOpen())
+	{
+		sf::Event event;
+		while (window.pollEvent(event))
+		{
+			if (event.type == sf::Event::Closed)
+				window.close();
+		}
+	}
 
 	return 0;
 }

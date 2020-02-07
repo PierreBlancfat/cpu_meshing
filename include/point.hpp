@@ -4,9 +4,10 @@
 
 
 struct Point {
+	int index;
 	float x;
 	float y;
-	Point(float xIn, float yIn) : x(xIn), y(yIn) { }
+	Point(float xIn, float yIn, int ind = -1) : x(xIn), y(yIn), index(ind){};
 };
 
 #endif

@@ -225,7 +225,7 @@ vector<Point> getPoints() {
 
 void print(const vector<Point>& v) {
 	for (auto p : v) {
-		cout << p.x << ", " << p.y << endl;
+		cout << p.index << ", " <<  p.x << ", " << p.y << endl;
 	}
 }
 
