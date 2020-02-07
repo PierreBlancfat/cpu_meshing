@@ -24,11 +24,11 @@ class Meshing{
         void draw_point(int x, int y, sf::Color= sf::Color::White);
         void draw_points();
         void draw_points(std::vector<Point> points, sf::Color color = sf::Color::White);
-        void draw_line(int x1, int y1, int x2, int y2);
+        void draw_line(float x1, float y1, float x2, float y2);
 
         int convex_hull(Eigen::MatrixXd points);
 
-        int triangulation();
+        int partition_path();
 
 
 };

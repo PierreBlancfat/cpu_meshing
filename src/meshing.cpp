@@ -8,7 +8,7 @@ using namespace Eigen;
 Meshing::Meshing(int witdh, int height, sf::RenderWindow  *win ){
     window = win;
     window->setFramerateLimit(1);
-    MatrixXd points_eigen = MatrixXd::Random(100,2)*witdh;
+    MatrixXd points_eigen = MatrixXd::Random(150,2)*witdh;
     points_eigen = points_eigen.array().abs();
 
     for(int i = 0; i < points_eigen.rows(); i++){
@@ -17,7 +17,7 @@ Meshing::Meshing(int witdh, int height, sf::RenderWindow  *win ){
 }
 
 
-int Meshing::triangulation(){
+int Meshing::partition_path(){
     // copy vector
     vector<Point> proj;
     // find median
@@ -36,9 +36,12 @@ int Meshing::triangulation(){
     }
     // delauney path :
     hull = quickHull(proj);
-    for (int i = 0; i < hull.size(); i++ ){
+    for (int i = 0; i < hull.size()-1; i++ ){
         int index = hull[i].index;
-        draw_point( points[index].x, points[index].y, sf::Color::Red);
+        int index2 = hull[i+1].index;
+        if(points[index].y > points[index2].y){
+            draw_line(points[index].x, points[index].y, points[index2].x, points[index2].y);
+        }
     }
 }
 
@@ -61,7 +64,7 @@ void Meshing::draw_points(){
     }
 }
 
-void Meshing::draw_line(int x1, int y1, int x2, int y2){
+void Meshing::draw_line(float x1, float y1, float x2, float y2){
     sf::Vertex line[2];
     line[0].position = sf::Vector2f(x1, y1);
     line[0].color  = sf::Color::Red;
@@ -84,11 +87,10 @@ int points_to_matrix(vector<Point> vect_points){
 int main(int argc, char **argv){
 
 
-    sf::RenderWindow window(sf::VideoMode(800, 600), "Delaunay triangulation");
+    sf::RenderWindow window(sf::VideoMode(800, 800), "Delaunay triangulation");
     Meshing mesh = Meshing(800, 800, &window);
     mesh.draw_points();
-
-    mesh.triangulation();
+    mesh.partition_path();
 
 	window.display();
 
