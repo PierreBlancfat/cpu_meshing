@@ -210,10 +210,13 @@ SFML_DIR:PATH=/usr/local/lib/cmake/SFML
 SFML_DOC_DIR:PATH=SFML_DOC_DIR-NOTFOUND
 
 //Value Computed by CMake
-gpu_project_BINARY_DIR:STATIC=/home/polo/work/siam/GPU/gpu_project/build
+gpu_project_BINARY_DIR:STATIC=/home/polo/work/siam/GPU/gpu_project/build/src
 
 //Value Computed by CMake
-gpu_project_SOURCE_DIR:STATIC=/home/polo/work/siam/GPU/gpu_project
+gpu_project_SOURCE_DIR:STATIC=/home/polo/work/siam/GPU/gpu_project/src
+
+//The directory containing a CMake configuration file for qhull.
+qhull_DIR:PATH=qhull_DIR-NOTFOUND
 
 
 ########################

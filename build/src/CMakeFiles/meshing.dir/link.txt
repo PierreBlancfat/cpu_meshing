@@ -1,1 +1,1 @@
-/usr/bin/c++    -rdynamic CMakeFiles/meshing.dir/meshing.cpp.o  -o ../../bin/meshing  -L./sfml/lib -Wl,-rpath,./sfml/lib:/usr/local/lib /usr/local/lib/libsfml-graphics.so.2.5.1 /usr/local/lib/libsfml-window.so.2.5.1 /usr/local/lib/libsfml-system.so.2.5.1 
+/usr/bin/c++    -rdynamic CMakeFiles/meshing.dir/meshing.cpp.o  -o ../../bin/meshing  -L/home/polo/work/siam/GPU/gpu_project/./sfml/lib -Wl,-rpath,/home/polo/work/siam/GPU/gpu_project/./sfml/lib -lsfml-graphics -lsfml-window -lsfml-system 

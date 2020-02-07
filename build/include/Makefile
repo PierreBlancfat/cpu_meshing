@@ -80,14 +80,14 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/polo/work/siam/GPU/gpu_project/build/CMakeFiles /home/polo/work/siam/GPU/gpu_project/build/CMakeFiles/progress.marks
-	$(MAKE) -f CMakeFiles/Makefile2 all
+	cd /home/polo/work/siam/GPU/gpu_project/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/polo/work/siam/GPU/gpu_project/build/CMakeFiles /home/polo/work/siam/GPU/gpu_project/build/include/CMakeFiles/progress.marks
+	cd /home/polo/work/siam/GPU/gpu_project/build && $(MAKE) -f CMakeFiles/Makefile2 include/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/polo/work/siam/GPU/gpu_project/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	$(MAKE) -f CMakeFiles/Makefile2 clean
+	cd /home/polo/work/siam/GPU/gpu_project/build && $(MAKE) -f CMakeFiles/Makefile2 include/clean
 .PHONY : clean
 
 # The main clean target
@@ -97,44 +97,18 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	$(MAKE) -f CMakeFiles/Makefile2 preinstall
+	cd /home/polo/work/siam/GPU/gpu_project/build && $(MAKE) -f CMakeFiles/Makefile2 include/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	$(MAKE) -f CMakeFiles/Makefile2 preinstall
+	cd /home/polo/work/siam/GPU/gpu_project/build && $(MAKE) -f CMakeFiles/Makefile2 include/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	$(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/polo/work/siam/GPU/gpu_project/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
-
-#=============================================================================
-# Target rules for targets named gpu_project
-
-# Build rule for target.
-gpu_project: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 gpu_project
-.PHONY : gpu_project
-
-# fast build rule for target.
-gpu_project/fast:
-	$(MAKE) -f src/CMakeFiles/gpu_project.dir/build.make src/CMakeFiles/gpu_project.dir/build
-.PHONY : gpu_project/fast
-
-#=============================================================================
-# Target rules for targets named meshing
-
-# Build rule for target.
-meshing: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 meshing
-.PHONY : meshing
-
-# fast build rule for target.
-meshing/fast:
-	$(MAKE) -f src/CMakeFiles/meshing.dir/build.make src/CMakeFiles/meshing.dir/build
-.PHONY : meshing/fast
 
 # Help Target
 help:
@@ -144,8 +118,6 @@ help:
 	@echo "... depend"
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
-	@echo "... gpu_project"
-	@echo "... meshing"
 .PHONY : help
 
 
@@ -157,6 +129,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	$(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/polo/work/siam/GPU/gpu_project/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

@@ -15,11 +15,6 @@ set(CMAKE_MAKEFILE_DEPENDS
   "/usr/lib/cmake/eigen3/Eigen3Config.cmake"
   "/usr/lib/cmake/eigen3/Eigen3ConfigVersion.cmake"
   "/usr/lib/cmake/eigen3/Eigen3Targets.cmake"
-  "/usr/local/lib/cmake/SFML/SFMLConfig.cmake"
-  "/usr/local/lib/cmake/SFML/SFMLConfigDependencies.cmake"
-  "/usr/local/lib/cmake/SFML/SFMLConfigVersion.cmake"
-  "/usr/local/lib/cmake/SFML/SFMLSharedTargets-release.cmake"
-  "/usr/local/lib/cmake/SFML/SFMLSharedTargets.cmake"
   "/usr/share/cmake-3.13/Modules/CMakeCInformation.cmake"
   "/usr/share/cmake-3.13/Modules/CMakeCXXInformation.cmake"
   "/usr/share/cmake-3.13/Modules/CMakeCommonLanguageInclude.cmake"
@@ -53,5 +48,6 @@ set(CMAKE_MAKEFILE_PRODUCTS
 
 # Dependency information for all targets:
 set(CMAKE_DEPEND_INFO_FILES
+  "src/CMakeFiles/gpu_project.dir/DependInfo.cmake"
   "src/CMakeFiles/meshing.dir/DependInfo.cmake"
   )

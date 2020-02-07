@@ -111,6 +111,21 @@ depend:
 .PHONY : depend
 
 # Convenience name for target.
+src/CMakeFiles/gpu_project.dir/rule:
+	cd /home/polo/work/siam/GPU/gpu_project/build && $(MAKE) -f CMakeFiles/Makefile2 src/CMakeFiles/gpu_project.dir/rule
+.PHONY : src/CMakeFiles/gpu_project.dir/rule
+
+# Convenience name for target.
+gpu_project: src/CMakeFiles/gpu_project.dir/rule
+
+.PHONY : gpu_project
+
+# fast build rule for target.
+gpu_project/fast:
+	cd /home/polo/work/siam/GPU/gpu_project/build && $(MAKE) -f src/CMakeFiles/gpu_project.dir/build.make src/CMakeFiles/gpu_project.dir/build
+.PHONY : gpu_project/fast
+
+# Convenience name for target.
 src/CMakeFiles/meshing.dir/rule:
 	cd /home/polo/work/siam/GPU/gpu_project/build && $(MAKE) -f CMakeFiles/Makefile2 src/CMakeFiles/meshing.dir/rule
 .PHONY : src/CMakeFiles/meshing.dir/rule
@@ -125,12 +140,40 @@ meshing/fast:
 	cd /home/polo/work/siam/GPU/gpu_project/build && $(MAKE) -f src/CMakeFiles/meshing.dir/build.make src/CMakeFiles/meshing.dir/build
 .PHONY : meshing/fast
 
+hull.o: hull.cpp.o
+
+.PHONY : hull.o
+
+# target to build an object file
+hull.cpp.o:
+	cd /home/polo/work/siam/GPU/gpu_project/build && $(MAKE) -f src/CMakeFiles/gpu_project.dir/build.make src/CMakeFiles/gpu_project.dir/hull.cpp.o
+.PHONY : hull.cpp.o
+
+hull.i: hull.cpp.i
+
+.PHONY : hull.i
+
+# target to preprocess a source file
+hull.cpp.i:
+	cd /home/polo/work/siam/GPU/gpu_project/build && $(MAKE) -f src/CMakeFiles/gpu_project.dir/build.make src/CMakeFiles/gpu_project.dir/hull.cpp.i
+.PHONY : hull.cpp.i
+
+hull.s: hull.cpp.s
+
+.PHONY : hull.s
+
+# target to generate assembly for a file
+hull.cpp.s:
+	cd /home/polo/work/siam/GPU/gpu_project/build && $(MAKE) -f src/CMakeFiles/gpu_project.dir/build.make src/CMakeFiles/gpu_project.dir/hull.cpp.s
+.PHONY : hull.cpp.s
+
 meshing.o: meshing.cpp.o
 
 .PHONY : meshing.o
 
 # target to build an object file
 meshing.cpp.o:
+	cd /home/polo/work/siam/GPU/gpu_project/build && $(MAKE) -f src/CMakeFiles/gpu_project.dir/build.make src/CMakeFiles/gpu_project.dir/meshing.cpp.o
 	cd /home/polo/work/siam/GPU/gpu_project/build && $(MAKE) -f src/CMakeFiles/meshing.dir/build.make src/CMakeFiles/meshing.dir/meshing.cpp.o
 .PHONY : meshing.cpp.o
 
@@ -140,6 +183,7 @@ meshing.i: meshing.cpp.i
 
 # target to preprocess a source file
 meshing.cpp.i:
+	cd /home/polo/work/siam/GPU/gpu_project/build && $(MAKE) -f src/CMakeFiles/gpu_project.dir/build.make src/CMakeFiles/gpu_project.dir/meshing.cpp.i
 	cd /home/polo/work/siam/GPU/gpu_project/build && $(MAKE) -f src/CMakeFiles/meshing.dir/build.make src/CMakeFiles/meshing.dir/meshing.cpp.i
 .PHONY : meshing.cpp.i
 
@@ -149,6 +193,7 @@ meshing.s: meshing.cpp.s
 
 # target to generate assembly for a file
 meshing.cpp.s:
+	cd /home/polo/work/siam/GPU/gpu_project/build && $(MAKE) -f src/CMakeFiles/gpu_project.dir/build.make src/CMakeFiles/gpu_project.dir/meshing.cpp.s
 	cd /home/polo/work/siam/GPU/gpu_project/build && $(MAKE) -f src/CMakeFiles/meshing.dir/build.make src/CMakeFiles/meshing.dir/meshing.cpp.s
 .PHONY : meshing.cpp.s
 
@@ -159,8 +204,12 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... rebuild_cache"
-	@echo "... meshing"
 	@echo "... edit_cache"
+	@echo "... gpu_project"
+	@echo "... meshing"
+	@echo "... hull.o"
+	@echo "... hull.i"
+	@echo "... hull.s"
 	@echo "... meshing.o"
 	@echo "... meshing.i"
 	@echo "... meshing.s"
