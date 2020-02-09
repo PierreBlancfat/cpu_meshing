@@ -1,1 +1,1 @@
-/usr/bin/c++    -rdynamic CMakeFiles/meshing.dir/meshing.cpp.o  -o ../../bin/meshing  -L/home/polo/work/siam/GPU/gpu_project/./sfml/lib -Wl,-rpath,/home/polo/work/siam/GPU/gpu_project/./sfml/lib -lsfml-graphics -lsfml-window -lsfml-system 
+/bin/g++-8  -g  -rdynamic CMakeFiles/meshing.dir/meshing.cpp.o  -o ../../bin/meshing  -L/home/polo/work/siam/GPU/gpu_project/./sfml/lib -Wl,-rpath,/home/polo/work/siam/GPU/gpu_project/./sfml/lib -lsfml-graphics -lsfml-window -lsfml-system 

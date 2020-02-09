@@ -28,7 +28,9 @@ class Meshing{
 
         int convex_hull(Eigen::MatrixXd points);
 
-        int partition_path();
+        int side(Point p, std::vector<Point> &path);
+        int* partition_1();
+        std::vector<Point> partition_path();
 
 
 };
