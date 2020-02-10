@@ -107,6 +107,32 @@ int Meshing::side(Point p, vector<Point> &path){
     return 0;
 }
 
+
+float dd(Edge e, Point p){
+    float a, b, c, circumradius;
+    // len ps
+    a = sqrt(pow(e.one.x - e.two.x,2) + pow(e.one.y - e.two.y,2));
+    // len e1-p
+    b = sqrt(pow(e.one.x - p.x,2) + pow(e.one.y - p.y,2));
+    // lenght e2-p
+    c = sqrt(pow(e.two.x - p.x,2) + pow(e.two.y - p.y,2));
+    circumradius = (a * b * c)/((a+b+c)*(b+c-a)*(c+a-b)*(a+b-c));
+    // outside or inside triangle ? -> Acute or obtute triangle 
+    // compute angles
+    Vector2f ab = {e.one.x - e.two.x, e.one.y - e.two.y};
+    Vector2f ac = {e.one.x - p.x, e.one.y - p.y};
+    Vector2f bc = {p.x - e.two.x, p.y - e.two.y};
+
+    float bac = acos(ab.dot(ac)/(a*b));
+    float abc = acos(ab.dot(bc)/(a*c));
+    float bca = acos(ac.dot(bc)/(b*c));
+    // obtute => outside
+    if (abd(bac) > 90 || abd(abc) > 90|| abd(bca) > 90){
+        return -circumradius;
+    }
+    return circumradius;
+}
+
 int* Meshing::partition_1(){
     vector<Point> path, H1, H2;
     path = partition_path();
@@ -125,7 +151,7 @@ int* Meshing::partition_1(){
         }
     }
 
-    //ParDeTri(H1,  )
+    ParDeTri(H1, path);
 
 }
 

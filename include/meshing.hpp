@@ -36,6 +36,7 @@ class Meshing{
 
 };
 
+float dd(Edge e, Point p);
 void update(Edge &e, std::vector<Edge> &L);
 int points_to_matrix(std::vector<Point> vect_points);
 int main(int argc, char **argv);
