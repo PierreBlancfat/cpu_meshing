@@ -25,13 +25,21 @@ void Meshing::draw_points(){
     }
 }
 
-void Meshing::draw_line(float x1, float y1, float x2, float y2){
+void Meshing::draw_line(float x1, float y1, float x2, float y2, sf::Color color){
     sf::Vertex line[2];
     line[0].position = sf::Vector2f(x1, y1);
-    line[0].color  = sf::Color::Red;
+    line[0].color  = color;
     line[1].position = sf::Vector2f(x2, y2);
-    line[1].color = sf::Color::Red;
+    line[1].color = color;
     window->draw(line, 2, sf::Lines);
+
+}
+
+void Meshing::draw_triangle( Triangle t, sf::Color color){
+    draw_line(t.one.x, t.one.y, t.two.x, t.two.y, color);
+    draw_line(t.two.x, t.two.y, t.three.x, t.three.y, color);
+    draw_line(t.one.x, t.one.y, t.three.x, t.three.y, color);
+
 
 }
 
@@ -46,12 +54,45 @@ int points_to_matrix(vector<Point> vect_points){
 Meshing::Meshing(int witdh, int height, sf::RenderWindow  *win ){
     window = win;
     window->setFramerateLimit(1);
-    MatrixXd points_eigen = MatrixXd::Random(150,2)*witdh;
+    MatrixXd points_eigen = MatrixXd::Random(200,2)*witdh;
     points_eigen = points_eigen.array().abs();
 
     for(int i = 0; i < points_eigen.rows(); i++){
         points.push_back(Point(points_eigen(i,0), points_eigen(i,1), i));
     }
+}
+
+
+
+int Meshing::ParDeTri(vector<Point> points_set, vector<Edge> edge_list, vector<Triangle> triangle_list){
+
+    
+    Triangle t();
+    while( edge_list.size() != 0){
+        // pop first edge
+        Edge e = Edge(edge_list[0].one, edge_list[0].one,edge_list[0].index);
+        edge_list.erase(edge_list.begin());
+        // make a triangle
+        Triangle t = Triangle(e, points_set[0]);
+        points_set.erase(points_set.begin());
+        // if( t != NULL){
+        triangle_list.push_back(t);
+        for( int i = 0; i < edge_list.size(); i++){
+            update(edge_list[i], edge_list);
+        // }
+        }
+    }
+    return 1;
+}
+
+void update(Edge &e, vector<Edge> &L){
+    for( int i = 0; i < L.size(); i++){   
+        if( e.one == L[i].one){
+            L.erase(L.begin()+i-1);
+        }
+    }
+    L.push_back(e);
+    return;
 }
 
 // TODO choose vertical/horizontale
@@ -83,6 +124,9 @@ int* Meshing::partition_1(){
             H2.push_back(points[i]);
         }
     }
+
+    //ParDeTri(H1,  )
+
 }
 
 //TODO choose between x or y median
@@ -130,6 +174,7 @@ int main(int argc, char **argv){
     Meshing mesh = Meshing(800, 800, &window);
     mesh.draw_points();
     mesh.partition_1();
+
 	window.display();
 
 	while (window.isOpen())
