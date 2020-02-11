@@ -28,10 +28,10 @@ class Meshing{
         void draw_triangle( Triangle t, sf::Color color = sf::Color::White);
 
         int nearest_point(std::vector<int> &ps, Edge &e);
-        int ParDeTri(std::vector<int> points_set, std::vector<Edge> edge_list);
         int convex_hull(Eigen::MatrixXd points);
         int side(Point p, std::vector<Point> &path);
         int partition_1();
+        std::vector<Triangle> ParDeTri(std::vector<int> points_set, std::vector<Edge> edge_list);
         std::vector<Point> partition_path();
 
 

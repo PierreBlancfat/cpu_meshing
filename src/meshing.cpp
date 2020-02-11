@@ -5,7 +5,209 @@ using namespace std;
 using namespace Eigen;
 
 
+// TRIANGULATION
 
+Meshing::Meshing(int witdh, int height, sf::RenderWindow  *win ){
+    window = win;
+    window->setFramerateLimit(1);
+    MatrixXd points_eigen = MatrixXd::Random(1000,2)*witdh;
+    points_eigen = points_eigen.array().abs();
+
+    for(int i = 0; i < points_eigen.rows(); i++){
+        points.push_back(Point(points_eigen(i,0), points_eigen(i,1), i));
+    }
+}
+
+
+int Meshing::partition_1(){
+    vector<Point> path;
+    vector<int> H1,H2;
+    path = partition_path();
+    int s;
+    // fill partitions
+    for(int i = 1; i < points.size(); i++){
+        if ( ! std::count(path.begin(), path.end(), points[i])){
+            s = side(points[i], path);
+            if ( s < 0){
+                draw_point(points[i].x, points[i].y, sf::Color::Green);
+                H1.push_back(i);
+
+            }   
+            if( s > 0)
+            {   
+                draw_point(points[i].x, points[i].y, sf::Color::Blue);
+                H2.push_back(i);
+            }
+        }
+    }
+
+    return 1;
+    vector<Triangle>  triangle_listH1;
+    triangle_listH1 = ParDeTri(H1, point_vect_to_vect_edge(path));
+    for( int i = 0; i < triangle_listH1.size(); i++){
+        cout << "draw " << i << endl;
+        draw_triangle(triangle_listH1[i]);
+    }
+    return 1;
+}
+
+
+vector<Triangle> Meshing::ParDeTri(vector<int> H, vector<Edge> path){
+    vector<Triangle> triangle_list;
+    int index_nearest_point;
+    Triangle t();
+    while( path.size() > 0){
+        // pop first edge
+        Edge e = Edge(path[0].one, path[0].two, path[0].index);
+        path.erase(path.begin());
+        // make a delaunay triangle
+        index_nearest_point = nearest_point(H, e);
+        if(index_nearest_point == -1){
+            return triangle_list;
+        }
+        cout << "nearest point :" << index_nearest_point << endl;
+        Triangle t = Triangle(e, points[H[index_nearest_point]]);
+        // draw_triangle(t);
+        H.erase(H.begin()+index_nearest_point);
+        triangle_list.push_back(t);
+
+        if( path.size() > 0 ){
+            // Update
+            update(Edge(t.one, t.three), path);
+            update(Edge(t.two, t.three), path);
+        }
+    }
+    cout << " finished ParDeTri " << endl;
+    return triangle_list;
+}
+
+void update(Edge e, vector<Edge> &path){
+    for( int i = 0; i < path.size(); i++){   
+        // cout << e.one.x << " " << e.one.y << " " << e.two.x << " " << e.two.y << endl;
+        // cout << path[i].one.x << " " << path[i].one.y << " " << path[i].two.x << " " << path[i].two.y << endl;
+        if(e == path[i]){
+            path.erase(path.begin()+i);
+            cout << "erase " << i << endl;
+            return;
+        }
+    }
+    cout << "push back  " << e.one.x<<  endl;
+    // path.push_back(e);
+    return;
+}
+
+
+// TODO choose vertical/horizontale
+// Now suit with verticale path
+int Meshing::side(Point p, vector<Point> &path){
+    // find segment 
+    for(int i = 1; i < path.size(); i++){
+
+        if( p.y <= path[i-1].y && p.y > path[i].y){
+            return  (p.x - path[i-1].x) * (path[i].y - path[i-1].y) -  (p.y- path[i-1].y) * (path[i].x -path[i-1].x);
+        }
+
+    }
+    if( p.y <= path[path.size()-1].y && p.y > path[0].y  && path[path.size()-1].y > path[0].y){
+        return  (p.x - path[path.size()-1].x) * (path[0].y - path[path.size()-1].y) -  (p.y- path[path.size()-1].y) * (path[0].x -path[path.size()-1].x);
+    }
+    return -1;
+}
+
+
+
+//TODO choose between x or y median
+vector<Point> Meshing::partition_path(){
+    // copy vector
+    vector<Point> proj;
+    // find median
+    std::vector<float> xcoord;
+    for (int i=0; i<points.size(); i++){
+        xcoord.push_back(points[i].x);
+     }
+    int n = sizeof(xcoord)/sizeof(xcoord[0]); 
+    sort(xcoord.begin(),  xcoord.end());
+    float median  = xcoord[xcoord.size()/2];
+    
+    //3d projection
+    vector<Point> hull;
+    for(int i = 0; i < points.size(); i++){
+        proj.push_back(Point(points[i].y,pow(points[i].x-median, 2) + pow(points[i].y,2), points[i].index));
+    }
+    // delauney path :
+    hull = quickHull(proj);
+    vector<Point> path;
+    int index, index2;
+    for(int j= 0; j<2; j++){
+        for (int i = 0; i < hull.size()-1; i++ ){
+            index = hull[i].index;
+            index2 = hull[i+1].index;
+            if(points[index].y > points[index2].y){
+                draw_line(points[index].x, points[index].y, points[index2].x, points[index2].y, sf::Color::Red);
+                path.push_back(points[index]);
+            }
+        }
+        index = hull[hull.size()-1].index;
+        index2 = hull[0].index;
+        if(points[index].y > points[index2].y){
+            draw_line(points[index].x, points[index].y, points[index2].x, points[index2].y, sf::Color::Red);
+            path.push_back(points[index]);
+        }        
+    }
+    
+    path.push_back(points[index2]);
+    return path;
+}
+
+
+int Meshing::nearest_point(vector<int> &ps, Edge &e){
+    float min = MAXFLOAT;
+    float dis;
+    int index_min = -1;
+    for( int i = 0; i < ps.size(); i++){
+        dis = dd(e, points[ps[i]]);
+        cout << "dis " << dis << endl;
+        if( min > dis){
+            min = dis;
+            index_min  = i;
+        }   
+    }
+    return index_min;
+}
+
+float dd(Edge e, Point p){
+    float a, b, c, circumradius;
+    // len ps
+    a = sqrt(pow(e.one.x - e.two.x,2) + pow(e.one.y - e.two.y,2));
+    // len e1-p
+    b = sqrt(pow(e.one.x - p.x,2) + pow(e.one.y - p.y,2));
+    // lenght e2-p
+    c = sqrt(pow(e.two.x - p.x,2) + pow(e.two.y - p.y,2));
+    circumradius = (a * b * c)/ sqrt(((a+b+c)*(b+c-a)*(c+a-b)*(a+b-c)));
+    // outside or inside triangle ? -> Acute or obtute triangle 
+    // compute angles
+    Vector2f ab = {e.one.x - e.two.x, e.one.y - e.two.y};
+    Vector2f ac = {e.one.x - p.x, e.one.y - p.y};
+    Vector2f bc = {p.x - e.two.x, p.y - e.two.y};
+
+    float bac = acos(ab.dot(ac)/(a*b));
+    float abc = acos(ab.dot(bc)/(a*c));
+    float bca = acos(ac.dot(bc)/(b*c));
+    // obtute => outside
+    if (bac > 3.14 || abc > 3.14|| bca > 3.14){
+        return -circumradius;
+    }
+    return circumradius;
+}
+
+
+vector<Edge> point_vect_to_vect_edge(vector<Point> &ps){
+    vector<Edge> edges;
+    for(int i = 1; i < ps.size(); i++){
+        edges.push_back(Edge(ps[i-1], ps[i]));
+    }
+    return edges;
+}
 
 // GRAPHIC
 
@@ -52,187 +254,6 @@ int points_to_matrix(vector<Point> vect_points){
     }
     return 1;
 }
-
-
-// TRIANGULATION
-
-Meshing::Meshing(int witdh, int height, sf::RenderWindow  *win ){
-    window = win;
-    window->setFramerateLimit(1);
-    MatrixXd points_eigen = MatrixXd::Random(50,2)*witdh;
-    points_eigen = points_eigen.array().abs();
-
-    for(int i = 0; i < points_eigen.rows(); i++){
-        points.push_back(Point(points_eigen(i,0), points_eigen(i,1), i));
-    }
-}
-
-
-vector<Edge> point_vect_to_vect_edge(vector<Point> &ps){
-    vector<Edge> edges;
-    for(int i = 1; i < ps.size(); i++){
-        edges.push_back(Edge(ps[i-1], ps[i]));
-    }
-    return edges;
-}
-
-
-int Meshing::ParDeTri(vector<int> H, vector<Edge> path){
-    vector<Triangle> triangle_list;
-    int index_nearest_point;
-    Triangle t();
-    while( path.size() > 0){
-        // pop first edge
-        Edge e = Edge(path[0].one, path[0].two,path[0].index);
-        path.erase(path.begin());
-        // make a triangle
-        index_nearest_point = nearest_point(H, e);
-        cout << index_nearest_point << endl;
-        Triangle t = Triangle(e, points[H[index_nearest_point]]);
-        draw_triangle(t);
-
-        H.erase(H.begin()+index_nearest_point);
-
-        // if( t != NULL){
-        triangle_list.push_back(t);
-        cout << "ici" << endl;
-        // Update
-        update(Edge(t.one, t.three), path);
-        update(Edge(t.two, t.three), path);
-        }
-    cout << " finished ParDeTri" << endl;
-    return 1;
-}
-
-void update(Edge e, vector<Edge> &path){
-    for( int i = 0; i < path.size(); i++){   
-        cout << "ici" << i  << endl;;
-        if( e == path[i]){
-            path.erase(path.begin()+i);
-        }
-    }
-    // path.push_back(e);
-    return;
-}
-
-// TODO choose vertical/horizontale
-// Now suit with verticale path
-int Meshing::side(Point p, vector<Point> &path){
-    // find segment 
-    for(int i = 1; i < path.size(); i++){
-        if( p.y > path[i-1].y){
-            return  (p.x - path[i-1].x) * (path[i].y - path[i-1].y) -  (p.y- path[i-1].y) * (path[i].x -path[i-1].x);
-        }
-    }
-    return 0;
-}
-
-
-int Meshing::partition_1(){
-    vector<Point> path;
-    vector<int> H1,H2;
-    path = partition_path();
-    int s;
-    // fill partitions
-    for(int i = 1; i < points.size(); i++){
-        if ( ! std::count(path.begin(), path.end(), points[i])){
-            s = side(points[i], path);
-            if ( s < 0){
-                draw_point(points[i].x, points[i].y, sf::Color::Green);
-                H1.push_back(i);
-
-            }   
-            if( s > 0)
-            {   
-                draw_point(points[i].x, points[i].y, sf::Color::Blue);
-                H2.push_back(i);
-            }
-        }
-    }
-
-    int fin = ParDeTri(H1, point_vect_to_vect_edge(path));
-    return 1;
-}
-
-//TODO choose between x or y median
-vector<Point> Meshing::partition_path(){
-    // copy vector
-    vector<Point> proj;
-    // find median
-    std::vector<float> xcoord;
-    for (int i=0; i<points.size(); i++){
-        xcoord.push_back(points[i].x);
-     }
-    int n = sizeof(xcoord)/sizeof(xcoord[0]); 
-    sort(xcoord.begin(),  xcoord.end());
-    float median  = xcoord[xcoord.size()/2];
-    
-    //3d projection
-    vector<Point> hull;
-    for(int i = 0; i < points.size(); i++){
-        proj.push_back(Point(points[i].y,pow(points[i].x-median, 2) + pow(points[i].y,2), points[i].index));
-    }
-    // delauney path :
-    hull = quickHull(proj);
-    vector<Point> path;
-    int index, index2;
-    for (int i = 0; i < hull.size()-1; i++ ){
-        index = hull[i].index;
-        index2 = hull[i+1].index;
-        if(points[index].y > points[index2].y){
-            draw_line(points[index].x, points[index].y, points[index2].x, points[index2].y, sf::Color::Red);
-            path.push_back(points[index]);
-
-        }
-    }
-    path.push_back(points[index2]);
-    return path;
-}
-
-
-int Meshing::nearest_point(vector<int> &ps, Edge &e){
-    float min = MAXFLOAT;
-    float dis;
-    int index_min;
-    for( int i = 0; i < ps.size(); i++){
-        dis = dd(e, points[ps[i]]);
-        cout << dis << endl;
-        if( min > dis){
-            min = dis;
-            index_min  = i;
-        }   
-    }
-    return index_min;
-}
-
-float dd(Edge e, Point p){
-    float a, b, c, circumradius;
-    // len ps
-    a = sqrt(pow(e.one.x - e.two.x,2) + pow(e.one.y - e.two.y,2));
-    // cout << e.one.x << " " << e.one.y << " " << e.two.x << " "<< e.two.y << " " << p.x << " " << p.y << " " << endl;
-    // len e1-p
-    b = sqrt(pow(e.one.x - p.x,2) + pow(e.one.y - p.y,2));
-    // lenght e2-p
-    c = sqrt(pow(e.two.x - p.x,2) + pow(e.two.y - p.y,2));
-    circumradius = (a * b * c)/((a+b+c)*(b+c-a)*(c+a-b)*(a+b-c));
-
-    // outside or inside triangle ? -> Acute or obtute triangle 
-    // compute angles
-    Vector2f ab = {e.one.x - e.two.x, e.one.y - e.two.y};
-    Vector2f ac = {e.one.x - p.x, e.one.y - p.y};
-    Vector2f bc = {p.x - e.two.x, p.y - e.two.y};
-
-    float bac = acos(ab.dot(ac)/(a*b));
-    float abc = acos(ab.dot(bc)/(a*c));
-    float bca = acos(ac.dot(bc)/(b*c));
-    // cout << bac << " " << abc << " " << " " << bca << " " << endl;
-    // obtute => outside
-    if (bac > 3.14 || abc > 3.14|| bca > 3.14){
-        return -circumradius;
-    }
-    return circumradius;
-}
-
 
 
 int main(int argc, char **argv){
