@@ -63,22 +63,33 @@ Meshing::Meshing(int witdh, int height, sf::RenderWindow  *win ){
 }
 
 
+vector<Edge> point_vect_to_vect_edge(vector<Point> &ps){
+    vector<Edge> edges;
+    for(int i = 1; i < ps.size(); i++){
+        edges.push_back(Edge(ps[i-1], ps[i]));
+    }
+    return edges;
+}
 
-int Meshing::ParDeTri(vector<Point> points_set, vector<Edge> edge_list, vector<Triangle> triangle_list){
 
-    
+int Meshing::ParDeTri(vector<Point> points_set, vector<Edge> edge_list){
+    vector<Triangle> triangle_list;
+    int index_nearest_point;
     Triangle t();
     while( edge_list.size() != 0){
         // pop first edge
         Edge e = Edge(edge_list[0].one, edge_list[0].one,edge_list[0].index);
         edge_list.erase(edge_list.begin());
         // make a triangle
-        Triangle t = Triangle(e, points_set[0]);
-        points_set.erase(points_set.begin());
+        index_nearest_point = nearest_point(points_set, e);
+        cout << "chaud ananas" << endl;
+        Triangle t = Triangle(e, points_set[index_nearest_point]);
+        draw_triangle(t);
+        points_set.erase(points_set.begin()+index_nearest_point);
         // if( t != NULL){
         triangle_list.push_back(t);
         for( int i = 0; i < edge_list.size(); i++){
-            update(edge_list[i], edge_list);
+            update(edge_list[index_nearest_point], edge_list);
         // }
         }
     }
@@ -108,15 +119,32 @@ int Meshing::side(Point p, vector<Point> &path){
 }
 
 
+int nearest_point(vector<Point> &ps, Edge &e){
+    float min = MAXFLOAT;
+    float dis;
+    int index_min;
+    for( int i = 0; i < ps.size(); i++){
+        dis = dd(e, ps[i]);
+        cout << dis << endl;
+        if( min > dis){
+            min = dis;
+            index_min  = i;
+        }   
+    }
+    return index_min;
+}
+
 float dd(Edge e, Point p){
     float a, b, c, circumradius;
     // len ps
     a = sqrt(pow(e.one.x - e.two.x,2) + pow(e.one.y - e.two.y,2));
+    cout << a << endl;
     // len e1-p
     b = sqrt(pow(e.one.x - p.x,2) + pow(e.one.y - p.y,2));
     // lenght e2-p
     c = sqrt(pow(e.two.x - p.x,2) + pow(e.two.y - p.y,2));
     circumradius = (a * b * c)/((a+b+c)*(b+c-a)*(c+a-b)*(a+b-c));
+
     // outside or inside triangle ? -> Acute or obtute triangle 
     // compute angles
     Vector2f ab = {e.one.x - e.two.x, e.one.y - e.two.y};
@@ -127,13 +155,13 @@ float dd(Edge e, Point p){
     float abc = acos(ab.dot(bc)/(a*c));
     float bca = acos(ac.dot(bc)/(b*c));
     // obtute => outside
-    if (abd(bac) > 90 || abd(abc) > 90|| abd(bca) > 90){
+    if (abs(bac) > 90 || abs(abc) > 90|| abs(bca) > 90){
         return -circumradius;
     }
     return circumradius;
 }
 
-int* Meshing::partition_1(){
+int Meshing::partition_1(){
     vector<Point> path, H1, H2;
     path = partition_path();
     int s;
@@ -151,8 +179,8 @@ int* Meshing::partition_1(){
         }
     }
 
-    ParDeTri(H1, path);
-
+    ParDeTri(H1, point_vect_to_vect_edge(path));
+    return 1;
 }
 
 //TODO choose between x or y median
