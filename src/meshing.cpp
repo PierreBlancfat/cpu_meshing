@@ -10,7 +10,7 @@ using namespace Eigen;
 Meshing::Meshing(int witdh, int height, sf::RenderWindow  *win ){
     window = win;
     window->setFramerateLimit(1);
-    MatrixXd points_eigen = MatrixXd::Random(1000,2)*witdh;
+    MatrixXd points_eigen = MatrixXd::Random(100,2)*witdh;
     points_eigen = points_eigen.array().abs();
 
     for(int i = 0; i < points_eigen.rows(); i++){
@@ -41,7 +41,6 @@ int Meshing::partition_1(){
         }
     }
 
-    return 1;
     vector<Triangle>  triangle_listH1;
     triangle_listH1 = ParDeTri(H1, point_vect_to_vect_edge(path));
     for( int i = 0; i < triangle_listH1.size(); i++){
@@ -92,7 +91,7 @@ void update(Edge e, vector<Edge> &path){
         }
     }
     cout << "push back  " << e.one.x<<  endl;
-    // path.push_back(e);
+    path.push_back(e);
     return;
 }
 
@@ -176,25 +175,24 @@ int Meshing::nearest_point(vector<int> &ps, Edge &e){
 }
 
 float dd(Edge e, Point p){
-    float a, b, c, circumradius;
-    // len ps
-    a = sqrt(pow(e.one.x - e.two.x,2) + pow(e.one.y - e.two.y,2));
-    // len e1-p
-    b = sqrt(pow(e.one.x - p.x,2) + pow(e.one.y - p.y,2));
-    // lenght e2-p
-    c = sqrt(pow(e.two.x - p.x,2) + pow(e.two.y - p.y,2));
-    circumradius = (a * b * c)/ sqrt(((a+b+c)*(b+c-a)*(c+a-b)*(a+b-c)));
-    // outside or inside triangle ? -> Acute or obtute triangle 
-    // compute angles
+    float n_ab, n_ac, n_bc, circumradius;
+
     Vector2f ab = {e.one.x - e.two.x, e.one.y - e.two.y};
     Vector2f ac = {e.one.x - p.x, e.one.y - p.y};
     Vector2f bc = {p.x - e.two.x, p.y - e.two.y};
+    
+    n_ab = ab.norm();
+    n_ac = ac.norm();
+    n_bc = bc.norm();
 
-    float bac = acos(ab.dot(ac)/(a*b));
-    float abc = acos(ab.dot(bc)/(a*c));
-    float bca = acos(ac.dot(bc)/(b*c));
-    // obtute => outside
-    if (bac > 3.14 || abc > 3.14|| bca > 3.14){
+    circumradius = (n_ab * n_ac * n_bc)/ sqrt(((n_ab+n_ac+n_bc)*(n_ac+n_bc-n_ab)*(n_bc+n_ab-n_ac)*(n_ab+n_ac-n_bc)));
+    float bac = acos(-ab.dot(-ac)/(n_ab*n_ac));
+    float abc = acos(-ab.dot(-bc)/(n_ab*n_bc));
+    float bca = acos(-ac.dot(bc)/(n_ac*n_bc));
+    
+    // obtute ? -circumdius
+    // cout << bac + abc + bca << endl;
+    if (bac > 3.1415/2 || abc > 3.1415/2||bca > 3.1415/2){
         return -circumradius;
     }
     return circumradius;
