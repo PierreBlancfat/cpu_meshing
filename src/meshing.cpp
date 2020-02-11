@@ -75,7 +75,6 @@ vector<Triangle> Meshing::ParDeTri(vector<int> H, vector<Edge> path){
         Triangle t = Triangle(path[0], points[H[index_nearest_point]]);
         if(t.is_triangle()){
             triangle_list.push_back(t);
-            return triangle_list;
 
             if( path.size() > 0 ){
                 // Update
@@ -202,9 +201,9 @@ float dd(Edge e, Point p){
     // obtute ? -circumdius
     // cout << bac + abc + bca << endl;
     if (bac > 3.1415/2 || abc > 3.1415/2||bca > 3.1415/2){
-        return -circumradius;
+        return circumradius;
     }
-    return circumradius;
+    return -circumradius;
 }
 
 
