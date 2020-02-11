@@ -40,6 +40,12 @@ struct Triangle {
 	Triangle(Point one, Point two,Point three, int ind = -1) : one(one), two(two),three(three), index(ind){};
 	Triangle(Edge edge,Point point, int ind = -1) : one(edge.one), two(edge.two),three(point), index(ind){};
 	Triangle();
+	bool is_triangle(){
+		if(one == two || two == three || one == three){
+			return false;
+		}
+		return true;
+	}
 };
 
 #endif

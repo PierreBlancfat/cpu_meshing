@@ -10,7 +10,7 @@ using namespace Eigen;
 Meshing::Meshing(int witdh, int height, sf::RenderWindow  *win ){
     window = win;
     window->setFramerateLimit(1);
-    MatrixXd points_eigen = MatrixXd::Random(100,2)*witdh;
+    MatrixXd points_eigen = MatrixXd::Random(12,2)*witdh;
     points_eigen = points_eigen.array().abs();
 
     for(int i = 0; i < points_eigen.rows(); i++){
@@ -25,7 +25,7 @@ int Meshing::partition_1(){
     path = partition_path();
     int s;
     // fill partitions
-    for(int i = 1; i < points.size(); i++){
+    for(int i = 0; i < points.size(); i++){
         if ( ! std::count(path.begin(), path.end(), points[i])){
             s = side(points[i], path);
             if ( s < 0){
@@ -33,20 +33,28 @@ int Meshing::partition_1(){
                 H1.push_back(i);
 
             }   
-            if( s > 0)
+            if( s >= 0)
             {   
                 draw_point(points[i].x, points[i].y, sf::Color::Blue);
                 H2.push_back(i);
             }
         }
     }
+    for(int i = 0; i< path.size(); i++){
+        H1.push_back(path[i].index);
+        H2.push_back(path[i].index);
+        draw_point(path[i].x, path[i].y, sf::Color::Yellow);
 
+    }
+    cout << path.size() << endl;
     vector<Triangle>  triangle_listH1;
     triangle_listH1 = ParDeTri(H1, point_vect_to_vect_edge(path));
+
     for( int i = 0; i < triangle_listH1.size(); i++){
         cout << "draw " << i << endl;
         draw_triangle(triangle_listH1[i]);
     }
+    
     return 1;
 }
 
@@ -56,24 +64,24 @@ vector<Triangle> Meshing::ParDeTri(vector<int> H, vector<Edge> path){
     int index_nearest_point;
     Triangle t();
     while( path.size() > 0){
+        cout << "**** path size : " << path.size() << "****" << endl;
         // pop first edge
-        Edge e = Edge(path[0].one, path[0].two, path[0].index);
-        path.erase(path.begin());
         // make a delaunay triangle
-        index_nearest_point = nearest_point(H, e);
+        index_nearest_point = nearest_point(H, path[0]);
         if(index_nearest_point == -1){
             return triangle_list;
         }
         cout << "nearest point :" << index_nearest_point << endl;
-        Triangle t = Triangle(e, points[H[index_nearest_point]]);
-        // draw_triangle(t);
-        H.erase(H.begin()+index_nearest_point);
-        triangle_list.push_back(t);
+        Triangle t = Triangle(path[0], points[H[index_nearest_point]]);
+        if(t.is_triangle()){
+            triangle_list.push_back(t);
+            return triangle_list;
 
-        if( path.size() > 0 ){
-            // Update
-            update(Edge(t.one, t.three), path);
-            update(Edge(t.two, t.three), path);
+            if( path.size() > 0 ){
+                // Update
+                update(Edge(t.one, t.three), path);
+                update(Edge(t.two, t.three), path);
+            }
         }
     }
     cout << " finished ParDeTri " << endl;
@@ -86,11 +94,11 @@ void update(Edge e, vector<Edge> &path){
         // cout << path[i].one.x << " " << path[i].one.y << " " << path[i].two.x << " " << path[i].two.y << endl;
         if(e == path[i]){
             path.erase(path.begin()+i);
-            cout << "erase " << i << endl;
+            cout << "############## erase " << i << endl;
             return;
         }
     }
-    cout << "push back  " << e.one.x<<  endl;
+    cout << "#### push back  " << e.one.index<<  endl;
     path.push_back(e);
     return;
 }
@@ -105,7 +113,6 @@ int Meshing::side(Point p, vector<Point> &path){
         if( p.y <= path[i-1].y && p.y > path[i].y){
             return  (p.x - path[i-1].x) * (path[i].y - path[i-1].y) -  (p.y- path[i-1].y) * (path[i].x -path[i-1].x);
         }
-
     }
     if( p.y <= path[path.size()-1].y && p.y > path[0].y  && path[path.size()-1].y > path[0].y){
         return  (p.x - path[path.size()-1].x) * (path[0].y - path[path.size()-1].y) -  (p.y- path[path.size()-1].y) * (path[0].x -path[path.size()-1].x);
@@ -137,22 +144,21 @@ vector<Point> Meshing::partition_path(){
     hull = quickHull(proj);
     vector<Point> path;
     int index, index2;
-    for(int j= 0; j<2; j++){
-        for (int i = 0; i < hull.size()-1; i++ ){
-            index = hull[i].index;
-            index2 = hull[i+1].index;
-            if(points[index].y > points[index2].y){
-                draw_line(points[index].x, points[index].y, points[index2].x, points[index2].y, sf::Color::Red);
-                path.push_back(points[index]);
-            }
-        }
-        index = hull[hull.size()-1].index;
-        index2 = hull[0].index;
+    for (int i = 0; i < hull.size()-1; i++ ){
+        index = hull[i].index;
+        index2 = hull[i+1].index;
         if(points[index].y > points[index2].y){
             draw_line(points[index].x, points[index].y, points[index2].x, points[index2].y, sf::Color::Red);
             path.push_back(points[index]);
-        }        
+        }
     }
+    index = hull[hull.size()-1].index;
+    index2 = hull[0].index;
+    if(points[index].y > points[index2].y){
+        draw_line(points[index].x, points[index].y, points[index2].x, points[index2].y, sf::Color::Red);
+        path.push_back(points[index]);
+    }        
+    
     
     path.push_back(points[index2]);
     return path;
@@ -177,6 +183,9 @@ int Meshing::nearest_point(vector<int> &ps, Edge &e){
 float dd(Edge e, Point p){
     float n_ab, n_ac, n_bc, circumradius;
 
+    if( !Triangle(e,p).is_triangle()){
+        return MAXFLOAT;
+    }
     Vector2f ab = {e.one.x - e.two.x, e.one.y - e.two.y};
     Vector2f ac = {e.one.x - p.x, e.one.y - p.y};
     Vector2f bc = {p.x - e.two.x, p.y - e.two.y};
