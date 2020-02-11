@@ -7,6 +7,8 @@ using namespace Eigen;
 
 
 
+// GRAPHIC
+
 void Meshing::draw_point(int x, int y, sf::Color color){
     sf::RectangleShape s{sf::Vector2f(4, 4)};
     s.setPosition(static_cast<float>(x), static_cast<float>(y));
@@ -36,7 +38,7 @@ void Meshing::draw_line(float x1, float y1, float x2, float y2, sf::Color color)
 }
 
 void Meshing::draw_triangle( Triangle t, sf::Color color){
-    draw_line(t.one.x, t.one.y, t.two.x, t.two.y, color);
+    // draw_line(t.one.x, t.one.y, t.two.x, t.two.y, color);
     draw_line(t.two.x, t.two.y, t.three.x, t.three.y, color);
     draw_line(t.one.x, t.one.y, t.three.x, t.three.y, color);
 
@@ -51,10 +53,13 @@ int points_to_matrix(vector<Point> vect_points){
     return 1;
 }
 
+
+// TRIANGULATION
+
 Meshing::Meshing(int witdh, int height, sf::RenderWindow  *win ){
     window = win;
     window->setFramerateLimit(1);
-    MatrixXd points_eigen = MatrixXd::Random(200,2)*witdh;
+    MatrixXd points_eigen = MatrixXd::Random(50,2)*witdh;
     points_eigen = points_eigen.array().abs();
 
     for(int i = 0; i < points_eigen.rows(); i++){
@@ -72,37 +77,41 @@ vector<Edge> point_vect_to_vect_edge(vector<Point> &ps){
 }
 
 
-int Meshing::ParDeTri(vector<Point> points_set, vector<Edge> edge_list){
+int Meshing::ParDeTri(vector<int> H, vector<Edge> path){
     vector<Triangle> triangle_list;
     int index_nearest_point;
     Triangle t();
-    while( edge_list.size() != 0){
+    while( path.size() > 0){
         // pop first edge
-        Edge e = Edge(edge_list[0].one, edge_list[0].one,edge_list[0].index);
-        edge_list.erase(edge_list.begin());
+        Edge e = Edge(path[0].one, path[0].two,path[0].index);
+        path.erase(path.begin());
         // make a triangle
-        index_nearest_point = nearest_point(points_set, e);
-        cout << "chaud ananas" << endl;
-        Triangle t = Triangle(e, points_set[index_nearest_point]);
+        index_nearest_point = nearest_point(H, e);
+        cout << index_nearest_point << endl;
+        Triangle t = Triangle(e, points[H[index_nearest_point]]);
         draw_triangle(t);
-        points_set.erase(points_set.begin()+index_nearest_point);
+
+        H.erase(H.begin()+index_nearest_point);
+
         // if( t != NULL){
         triangle_list.push_back(t);
-        for( int i = 0; i < edge_list.size(); i++){
-            update(edge_list[index_nearest_point], edge_list);
-        // }
+        cout << "ici" << endl;
+        // Update
+        update(Edge(t.one, t.three), path);
+        update(Edge(t.two, t.three), path);
         }
-    }
+    cout << " finished ParDeTri" << endl;
     return 1;
 }
 
-void update(Edge &e, vector<Edge> &L){
-    for( int i = 0; i < L.size(); i++){   
-        if( e.one == L[i].one){
-            L.erase(L.begin()+i-1);
+void update(Edge e, vector<Edge> &path){
+    for( int i = 0; i < path.size(); i++){   
+        cout << "ici" << i  << endl;;
+        if( e == path[i]){
+            path.erase(path.begin()+i);
         }
     }
-    L.push_back(e);
+    // path.push_back(e);
     return;
 }
 
@@ -119,67 +128,29 @@ int Meshing::side(Point p, vector<Point> &path){
 }
 
 
-int nearest_point(vector<Point> &ps, Edge &e){
-    float min = MAXFLOAT;
-    float dis;
-    int index_min;
-    for( int i = 0; i < ps.size(); i++){
-        dis = dd(e, ps[i]);
-        cout << dis << endl;
-        if( min > dis){
-            min = dis;
-            index_min  = i;
-        }   
-    }
-    return index_min;
-}
-
-float dd(Edge e, Point p){
-    float a, b, c, circumradius;
-    // len ps
-    a = sqrt(pow(e.one.x - e.two.x,2) + pow(e.one.y - e.two.y,2));
-    cout << a << endl;
-    // len e1-p
-    b = sqrt(pow(e.one.x - p.x,2) + pow(e.one.y - p.y,2));
-    // lenght e2-p
-    c = sqrt(pow(e.two.x - p.x,2) + pow(e.two.y - p.y,2));
-    circumradius = (a * b * c)/((a+b+c)*(b+c-a)*(c+a-b)*(a+b-c));
-
-    // outside or inside triangle ? -> Acute or obtute triangle 
-    // compute angles
-    Vector2f ab = {e.one.x - e.two.x, e.one.y - e.two.y};
-    Vector2f ac = {e.one.x - p.x, e.one.y - p.y};
-    Vector2f bc = {p.x - e.two.x, p.y - e.two.y};
-
-    float bac = acos(ab.dot(ac)/(a*b));
-    float abc = acos(ab.dot(bc)/(a*c));
-    float bca = acos(ac.dot(bc)/(b*c));
-    // obtute => outside
-    if (abs(bac) > 90 || abs(abc) > 90|| abs(bca) > 90){
-        return -circumradius;
-    }
-    return circumradius;
-}
-
 int Meshing::partition_1(){
-    vector<Point> path, H1, H2;
+    vector<Point> path;
+    vector<int> H1,H2;
     path = partition_path();
     int s;
+    // fill partitions
     for(int i = 1; i < points.size(); i++){
-        s = side(points[i], path);
-        if ( s < 0){
-            draw_point(points[i].x, points[i].y, sf::Color::Green);
-            H1.push_back(points[i]);
+        if ( ! std::count(path.begin(), path.end(), points[i])){
+            s = side(points[i], path);
+            if ( s < 0){
+                draw_point(points[i].x, points[i].y, sf::Color::Green);
+                H1.push_back(i);
 
-        }   
-        if( s > 0)
-        {   
-            draw_point(points[i].x, points[i].y, sf::Color::Blue);
-            H2.push_back(points[i]);
+            }   
+            if( s > 0)
+            {   
+                draw_point(points[i].x, points[i].y, sf::Color::Blue);
+                H2.push_back(i);
+            }
         }
     }
 
-    ParDeTri(H1, point_vect_to_vect_edge(path));
+    int fin = ParDeTri(H1, point_vect_to_vect_edge(path));
     return 1;
 }
 
@@ -209,8 +180,9 @@ vector<Point> Meshing::partition_path(){
         index = hull[i].index;
         index2 = hull[i+1].index;
         if(points[index].y > points[index2].y){
-            draw_line(points[index].x, points[index].y, points[index2].x, points[index2].y);
+            draw_line(points[index].x, points[index].y, points[index2].x, points[index2].y, sf::Color::Red);
             path.push_back(points[index]);
+
         }
     }
     path.push_back(points[index2]);
@@ -218,6 +190,48 @@ vector<Point> Meshing::partition_path(){
 }
 
 
+int Meshing::nearest_point(vector<int> &ps, Edge &e){
+    float min = MAXFLOAT;
+    float dis;
+    int index_min;
+    for( int i = 0; i < ps.size(); i++){
+        dis = dd(e, points[ps[i]]);
+        cout << dis << endl;
+        if( min > dis){
+            min = dis;
+            index_min  = i;
+        }   
+    }
+    return index_min;
+}
+
+float dd(Edge e, Point p){
+    float a, b, c, circumradius;
+    // len ps
+    a = sqrt(pow(e.one.x - e.two.x,2) + pow(e.one.y - e.two.y,2));
+    // cout << e.one.x << " " << e.one.y << " " << e.two.x << " "<< e.two.y << " " << p.x << " " << p.y << " " << endl;
+    // len e1-p
+    b = sqrt(pow(e.one.x - p.x,2) + pow(e.one.y - p.y,2));
+    // lenght e2-p
+    c = sqrt(pow(e.two.x - p.x,2) + pow(e.two.y - p.y,2));
+    circumradius = (a * b * c)/((a+b+c)*(b+c-a)*(c+a-b)*(a+b-c));
+
+    // outside or inside triangle ? -> Acute or obtute triangle 
+    // compute angles
+    Vector2f ab = {e.one.x - e.two.x, e.one.y - e.two.y};
+    Vector2f ac = {e.one.x - p.x, e.one.y - p.y};
+    Vector2f bc = {p.x - e.two.x, p.y - e.two.y};
+
+    float bac = acos(ab.dot(ac)/(a*b));
+    float abc = acos(ab.dot(bc)/(a*c));
+    float bca = acos(ac.dot(bc)/(b*c));
+    // cout << bac << " " << abc << " " << " " << bca << " " << endl;
+    // obtute => outside
+    if (bac > 3.14 || abc > 3.14|| bca > 3.14){
+        return -circumradius;
+    }
+    return circumradius;
+}
 
 
 
@@ -227,7 +241,7 @@ int main(int argc, char **argv){
     sf::RenderWindow window(sf::VideoMode(800, 800), "Delaunay triangulation");
     Meshing mesh = Meshing(800, 800, &window);
     mesh.draw_points();
-    mesh.partition_1();
+    int fin = mesh.partition_1();
 
 	window.display();
 

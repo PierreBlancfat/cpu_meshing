@@ -23,7 +23,7 @@ struct Edge {
 	Edge(Point one, Point two, int ind = -1) : one(one), two(two), index(ind){};
 	Edge();
 	bool operator==(Edge a) const {
-      if(a.one==one && a.two == two)
+      if(a.one==one && a.two == two || a.one==two && a.two == one)
          return true;
       else
          return false;
