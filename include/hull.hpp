@@ -1,3 +1,6 @@
+#ifndef HULL_HPP
+#define HULL_HPP
+
 #include "point.hpp"
 #include <algorithm>
 #include <iostream>
@@ -46,3 +49,4 @@ std::vector<Point> quickHull(const std::vector<Point>& v);
 std::vector<Point> getPoints() ;
 void print(const std::vector<Point>& v);
 
+#endif

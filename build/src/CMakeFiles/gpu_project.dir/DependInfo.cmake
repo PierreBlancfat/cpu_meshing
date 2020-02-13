@@ -6,6 +6,8 @@ set(CMAKE_DEPENDS_LANGUAGES
 set(CMAKE_DEPENDS_CHECK_CXX
   "/home/polo/work/siam/GPU/gpu_project/src/hull.cpp" "/home/polo/work/siam/GPU/gpu_project/build/src/CMakeFiles/gpu_project.dir/hull.cpp.o"
   "/home/polo/work/siam/GPU/gpu_project/src/meshing.cpp" "/home/polo/work/siam/GPU/gpu_project/build/src/CMakeFiles/gpu_project.dir/meshing.cpp.o"
+  "/home/polo/work/siam/GPU/gpu_project/src/performance.cpp" "/home/polo/work/siam/GPU/gpu_project/build/src/CMakeFiles/gpu_project.dir/performance.cpp.o"
+  "/home/polo/work/siam/GPU/gpu_project/src/triangulation.cpp" "/home/polo/work/siam/GPU/gpu_project/build/src/CMakeFiles/gpu_project.dir/triangulation.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

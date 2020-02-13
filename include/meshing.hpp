@@ -2,12 +2,16 @@
 #define MESHING_HPP
 
 
+
+#include <sys/time.h>
 #include <iostream>
+#include <time.h>
 #include <list>
 #include <vector>
 #include <Eigen/Dense>
 #include <SFML/Graphics.hpp>
 // #include <CL/cl.h>
+#include <omp.h>
 #include "hull.hpp"
 
 class Meshing{
@@ -44,7 +48,6 @@ float dd(Edge e, Point p);
 std::vector<Edge> point_vect_to_vect_edge(std::vector<Point> &ps);
 void update(Edge e, std::vector<Edge> &L);
 int points_to_matrix(std::vector<Point> vect_points);
-int main(int argc, char **argv);
 
 
 #endif

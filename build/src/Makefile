@@ -111,6 +111,21 @@ depend:
 .PHONY : depend
 
 # Convenience name for target.
+src/CMakeFiles/performance.dir/rule:
+	cd /home/polo/work/siam/GPU/gpu_project/build && $(MAKE) -f CMakeFiles/Makefile2 src/CMakeFiles/performance.dir/rule
+.PHONY : src/CMakeFiles/performance.dir/rule
+
+# Convenience name for target.
+performance: src/CMakeFiles/performance.dir/rule
+
+.PHONY : performance
+
+# fast build rule for target.
+performance/fast:
+	cd /home/polo/work/siam/GPU/gpu_project/build && $(MAKE) -f src/CMakeFiles/performance.dir/build.make src/CMakeFiles/performance.dir/build
+.PHONY : performance/fast
+
+# Convenience name for target.
 src/CMakeFiles/gpu_project.dir/rule:
 	cd /home/polo/work/siam/GPU/gpu_project/build && $(MAKE) -f CMakeFiles/Makefile2 src/CMakeFiles/gpu_project.dir/rule
 .PHONY : src/CMakeFiles/gpu_project.dir/rule
@@ -126,19 +141,19 @@ gpu_project/fast:
 .PHONY : gpu_project/fast
 
 # Convenience name for target.
-src/CMakeFiles/meshing.dir/rule:
-	cd /home/polo/work/siam/GPU/gpu_project/build && $(MAKE) -f CMakeFiles/Makefile2 src/CMakeFiles/meshing.dir/rule
-.PHONY : src/CMakeFiles/meshing.dir/rule
+src/CMakeFiles/triangulation.dir/rule:
+	cd /home/polo/work/siam/GPU/gpu_project/build && $(MAKE) -f CMakeFiles/Makefile2 src/CMakeFiles/triangulation.dir/rule
+.PHONY : src/CMakeFiles/triangulation.dir/rule
 
 # Convenience name for target.
-meshing: src/CMakeFiles/meshing.dir/rule
+triangulation: src/CMakeFiles/triangulation.dir/rule
 
-.PHONY : meshing
+.PHONY : triangulation
 
 # fast build rule for target.
-meshing/fast:
-	cd /home/polo/work/siam/GPU/gpu_project/build && $(MAKE) -f src/CMakeFiles/meshing.dir/build.make src/CMakeFiles/meshing.dir/build
-.PHONY : meshing/fast
+triangulation/fast:
+	cd /home/polo/work/siam/GPU/gpu_project/build && $(MAKE) -f src/CMakeFiles/triangulation.dir/build.make src/CMakeFiles/triangulation.dir/build
+.PHONY : triangulation/fast
 
 hull.o: hull.cpp.o
 
@@ -174,7 +189,6 @@ meshing.o: meshing.cpp.o
 # target to build an object file
 meshing.cpp.o:
 	cd /home/polo/work/siam/GPU/gpu_project/build && $(MAKE) -f src/CMakeFiles/gpu_project.dir/build.make src/CMakeFiles/gpu_project.dir/meshing.cpp.o
-	cd /home/polo/work/siam/GPU/gpu_project/build && $(MAKE) -f src/CMakeFiles/meshing.dir/build.make src/CMakeFiles/meshing.dir/meshing.cpp.o
 .PHONY : meshing.cpp.o
 
 meshing.i: meshing.cpp.i
@@ -184,7 +198,6 @@ meshing.i: meshing.cpp.i
 # target to preprocess a source file
 meshing.cpp.i:
 	cd /home/polo/work/siam/GPU/gpu_project/build && $(MAKE) -f src/CMakeFiles/gpu_project.dir/build.make src/CMakeFiles/gpu_project.dir/meshing.cpp.i
-	cd /home/polo/work/siam/GPU/gpu_project/build && $(MAKE) -f src/CMakeFiles/meshing.dir/build.make src/CMakeFiles/meshing.dir/meshing.cpp.i
 .PHONY : meshing.cpp.i
 
 meshing.s: meshing.cpp.s
@@ -194,8 +207,67 @@ meshing.s: meshing.cpp.s
 # target to generate assembly for a file
 meshing.cpp.s:
 	cd /home/polo/work/siam/GPU/gpu_project/build && $(MAKE) -f src/CMakeFiles/gpu_project.dir/build.make src/CMakeFiles/gpu_project.dir/meshing.cpp.s
-	cd /home/polo/work/siam/GPU/gpu_project/build && $(MAKE) -f src/CMakeFiles/meshing.dir/build.make src/CMakeFiles/meshing.dir/meshing.cpp.s
 .PHONY : meshing.cpp.s
+
+performance.o: performance.cpp.o
+
+.PHONY : performance.o
+
+# target to build an object file
+performance.cpp.o:
+	cd /home/polo/work/siam/GPU/gpu_project/build && $(MAKE) -f src/CMakeFiles/performance.dir/build.make src/CMakeFiles/performance.dir/performance.cpp.o
+	cd /home/polo/work/siam/GPU/gpu_project/build && $(MAKE) -f src/CMakeFiles/gpu_project.dir/build.make src/CMakeFiles/gpu_project.dir/performance.cpp.o
+.PHONY : performance.cpp.o
+
+performance.i: performance.cpp.i
+
+.PHONY : performance.i
+
+# target to preprocess a source file
+performance.cpp.i:
+	cd /home/polo/work/siam/GPU/gpu_project/build && $(MAKE) -f src/CMakeFiles/performance.dir/build.make src/CMakeFiles/performance.dir/performance.cpp.i
+	cd /home/polo/work/siam/GPU/gpu_project/build && $(MAKE) -f src/CMakeFiles/gpu_project.dir/build.make src/CMakeFiles/gpu_project.dir/performance.cpp.i
+.PHONY : performance.cpp.i
+
+performance.s: performance.cpp.s
+
+.PHONY : performance.s
+
+# target to generate assembly for a file
+performance.cpp.s:
+	cd /home/polo/work/siam/GPU/gpu_project/build && $(MAKE) -f src/CMakeFiles/performance.dir/build.make src/CMakeFiles/performance.dir/performance.cpp.s
+	cd /home/polo/work/siam/GPU/gpu_project/build && $(MAKE) -f src/CMakeFiles/gpu_project.dir/build.make src/CMakeFiles/gpu_project.dir/performance.cpp.s
+.PHONY : performance.cpp.s
+
+triangulation.o: triangulation.cpp.o
+
+.PHONY : triangulation.o
+
+# target to build an object file
+triangulation.cpp.o:
+	cd /home/polo/work/siam/GPU/gpu_project/build && $(MAKE) -f src/CMakeFiles/gpu_project.dir/build.make src/CMakeFiles/gpu_project.dir/triangulation.cpp.o
+	cd /home/polo/work/siam/GPU/gpu_project/build && $(MAKE) -f src/CMakeFiles/triangulation.dir/build.make src/CMakeFiles/triangulation.dir/triangulation.cpp.o
+.PHONY : triangulation.cpp.o
+
+triangulation.i: triangulation.cpp.i
+
+.PHONY : triangulation.i
+
+# target to preprocess a source file
+triangulation.cpp.i:
+	cd /home/polo/work/siam/GPU/gpu_project/build && $(MAKE) -f src/CMakeFiles/gpu_project.dir/build.make src/CMakeFiles/gpu_project.dir/triangulation.cpp.i
+	cd /home/polo/work/siam/GPU/gpu_project/build && $(MAKE) -f src/CMakeFiles/triangulation.dir/build.make src/CMakeFiles/triangulation.dir/triangulation.cpp.i
+.PHONY : triangulation.cpp.i
+
+triangulation.s: triangulation.cpp.s
+
+.PHONY : triangulation.s
+
+# target to generate assembly for a file
+triangulation.cpp.s:
+	cd /home/polo/work/siam/GPU/gpu_project/build && $(MAKE) -f src/CMakeFiles/gpu_project.dir/build.make src/CMakeFiles/gpu_project.dir/triangulation.cpp.s
+	cd /home/polo/work/siam/GPU/gpu_project/build && $(MAKE) -f src/CMakeFiles/triangulation.dir/build.make src/CMakeFiles/triangulation.dir/triangulation.cpp.s
+.PHONY : triangulation.cpp.s
 
 # Help Target
 help:
@@ -204,15 +276,22 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... rebuild_cache"
-	@echo "... edit_cache"
+	@echo "... performance"
 	@echo "... gpu_project"
-	@echo "... meshing"
+	@echo "... edit_cache"
+	@echo "... triangulation"
 	@echo "... hull.o"
 	@echo "... hull.i"
 	@echo "... hull.s"
 	@echo "... meshing.o"
 	@echo "... meshing.i"
 	@echo "... meshing.s"
+	@echo "... performance.o"
+	@echo "... performance.i"
+	@echo "... performance.s"
+	@echo "... triangulation.o"
+	@echo "... triangulation.i"
+	@echo "... triangulation.s"
 .PHONY : help
 
 

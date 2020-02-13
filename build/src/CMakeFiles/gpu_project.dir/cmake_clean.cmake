@@ -1,6 +1,8 @@
 file(REMOVE_RECURSE
   "CMakeFiles/gpu_project.dir/meshing.cpp.o"
   "CMakeFiles/gpu_project.dir/hull.cpp.o"
+  "CMakeFiles/gpu_project.dir/triangulation.cpp.o"
+  "CMakeFiles/gpu_project.dir/performance.cpp.o"
   "libgpu_project.pdb"
   "libgpu_project.a"
 )

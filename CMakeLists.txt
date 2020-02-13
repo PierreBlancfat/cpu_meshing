@@ -3,6 +3,8 @@ cmake_minimum_required(VERSION 2.8.11)
 #Project configuration
 project(gpu_project)
 
+add_compile_options("-fopenmp")
+
 set( EXECUTABLE_OUTPUT_PATH ${gpu_project_SOURCE_DIR}/bin )
 
 # Eigen
@@ -13,6 +15,15 @@ include_directories(${EIGEN3_INCLUDE_DIR})
 link_directories("./sfml/lib/")
 
 
+# OPENMP
+OPTION (USE_OpenMP "Use OpenMP" ON)
+IF(USE_OpenMP)
+  FIND_PACKAGE(OpenMP)
+  IF(OPENMP_FOUND)
+    SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+  ENDIF()
+ENDIF()
 
 #OpenCL
 
@@ -31,8 +42,7 @@ link_directories("./sfml/lib/")
 # add_definitions(${OPENCL_CXX_DEFINITIONS})
 
 
-include_directories(include/)
-
+include_directories(include)
 add_subdirectory(src)
 
 

@@ -19,7 +19,11 @@ cmath
 -
 
 ../include/meshing.hpp
+sys/time.h
+-
 iostream
+-
+time.h
 -
 list
 -
@@ -28,6 +32,8 @@ vector
 Eigen/Dense
 -
 SFML/Graphics.hpp
+-
+omp.h
 -
 hull.hpp
 ../include/hull.hpp

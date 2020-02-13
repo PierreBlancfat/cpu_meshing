@@ -44,10 +44,6 @@ hull.hpp
 meshing.hpp
 -
 
-/home/polo/work/siam/GPU/gpu_project/src/triangulation.cpp
-meshing.hpp
--
-
 /usr/include/eigen3/Eigen/Cholesky
 Core
 /usr/include/eigen3/Eigen/Core

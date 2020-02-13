@@ -1,0 +1,1 @@
+/usr/bin/c++   -fopenmp  -rdynamic CMakeFiles/triangulation.dir/triangulation.cpp.o  -o ../../bin/triangulation  -L/home/polo/work/siam/GPU/gpu_project/./sfml/lib -Wl,-rpath,/home/polo/work/siam/GPU/gpu_project/./sfml/lib libgpu_project.a -lsfml-graphics -lsfml-window -lsfml-system 

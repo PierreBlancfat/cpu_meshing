@@ -7,12 +7,15 @@ using namespace Eigen;
 
 // TRIANGULATION
 
+
+
+
 Meshing::Meshing(int witdh, int height, sf::RenderWindow  *win ){
     window = win;
     window->setFramerateLimit(1);
-    MatrixXd points_eigen = MatrixXd::Random(3,2)*witdh;
+    MatrixXd points_eigen = MatrixXd::Random(30000,2)*witdh;
     points_eigen = points_eigen.array().abs();
-
+    
     for(int i = 0; i < points_eigen.rows(); i++){
         points.push_back(Point(points_eigen(i,0), points_eigen(i,1), i));
     }
@@ -22,16 +25,37 @@ Meshing::Meshing(int witdh, int height, sf::RenderWindow  *win ){
 
 // not functionnal
 int Meshing::triangulation(int nb_partition){
+    struct timeval start, end;
+    gettimeofday(&start, NULL);
+
+
+
+    long delta = 0;
+
     vector<int> H1, H2;
     vector<Point> path;
     path = partition(points, H1, H2);
     vector<Triangle>  triangle_listH1;
-    ParDeTri(H1, point_vect_to_vect_edge(path), triangle_listH1);
+    // #pragma omp parallel
+    // {
+    //     ParDeTri(H1, point_vect_to_vect_edge(path), triangle_listH1);
+    // }
+    // #pragma omp parallel
+    // {
+    //     ParDeTri(H2, point_vect_to_vect_edge(path), triangle_listH1);
+    // }
+        ParDeTri(H1, point_vect_to_vect_edge(path), triangle_listH1);
+        ParDeTri(H2, point_vect_to_vect_edge(path), triangle_listH1);
+
     for( int i = 0; i < triangle_listH1.size(); i++){
         cout << "draw " << i << endl;
         cout << triangle_listH1[i].one.index << " " << triangle_listH1[i].two.index << " "  << triangle_listH1[i].three.index << " " << endl;
         draw_triangle(triangle_listH1[i]);
     }
+
+    gettimeofday(&end, NULL);
+    delta = ((end.tv_sec  - start.tv_sec) * 1000000u + end.tv_usec - start.tv_usec) / 1.e6;
+    cout << "time elapse :" << delta << endl;
     return 1;
 }
 
@@ -69,7 +93,7 @@ std::vector<Point> Meshing::partition(std::vector<Point> list_points, vector<int
 void Meshing::ParDeTri(vector<int> point_set, vector<Edge> edge_list, vector<Triangle> &triangle_list){
     int index_nearest_point;
     int it = 0;
-    int max_it = 10;
+    int max_it = 100;
     while( edge_list.size() > 0 && it < max_it){
         it++;
         cout << "********* edge_list size : " << edge_list.size() << "*************" << endl;
@@ -179,14 +203,14 @@ int Meshing::nearest_point(vector<int> &ps, Edge &e){
     int index_min = -1;
     for( int i = 0; i < ps.size(); i++){
         dis = dd(e, points[ps[i]]);
-        cout << "dis " << dis << " " << i << endl;
+        // cout << "dis " << dis << " " << i << endl;
         if( min > dis){
             min = dis;
             index_min  = i;
             min_dis = dis;
         }   
     }
-    cout << "dis" << index_min << " "  << min_dis << endl;
+    // cout << "dis" << index_min << " "  << min_dis << endl;
     return index_min;
 }
 
@@ -273,26 +297,3 @@ int points_to_matrix(vector<Point> vect_points){
     return 1;
 }
 
-
-int main(int argc, char **argv){
-
-
-    sf::RenderWindow window(sf::VideoMode(800, 800), "Delaunay triangulation");
-    Meshing mesh = Meshing(800, 800, &window);
-    mesh.draw_points();
-    int fin = mesh.triangulation(1);
-	window.display();
-
-	while (window.isOpen())
-	{
-		sf::Event event;
-		while (window.pollEvent(event))
-		{
-			if (event.type == sf::Event::Closed)
-				window.close();
-		}
-	}
-
-	return 0;
-}
- 

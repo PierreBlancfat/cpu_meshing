@@ -111,6 +111,19 @@ depend:
 .PHONY : depend
 
 #=============================================================================
+# Target rules for targets named performance
+
+# Build rule for target.
+performance: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 performance
+.PHONY : performance
+
+# fast build rule for target.
+performance/fast:
+	$(MAKE) -f src/CMakeFiles/performance.dir/build.make src/CMakeFiles/performance.dir/build
+.PHONY : performance/fast
+
+#=============================================================================
 # Target rules for targets named gpu_project
 
 # Build rule for target.
@@ -124,17 +137,17 @@ gpu_project/fast:
 .PHONY : gpu_project/fast
 
 #=============================================================================
-# Target rules for targets named meshing
+# Target rules for targets named triangulation
 
 # Build rule for target.
-meshing: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 meshing
-.PHONY : meshing
+triangulation: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 triangulation
+.PHONY : triangulation
 
 # fast build rule for target.
-meshing/fast:
-	$(MAKE) -f src/CMakeFiles/meshing.dir/build.make src/CMakeFiles/meshing.dir/build
-.PHONY : meshing/fast
+triangulation/fast:
+	$(MAKE) -f src/CMakeFiles/triangulation.dir/build.make src/CMakeFiles/triangulation.dir/build
+.PHONY : triangulation/fast
 
 # Help Target
 help:
@@ -144,8 +157,9 @@ help:
 	@echo "... depend"
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
+	@echo "... performance"
 	@echo "... gpu_project"
-	@echo "... meshing"
+	@echo "... triangulation"
 .PHONY : help
 
 
