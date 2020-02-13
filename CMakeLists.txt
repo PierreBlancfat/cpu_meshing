@@ -9,6 +9,10 @@ set( EXECUTABLE_OUTPUT_PATH ${gpu_project_SOURCE_DIR}/bin )
 find_package( Eigen3 REQUIRED )
 include_directories(${EIGEN3_INCLUDE_DIR})
 
+# SFML
+link_directories("./sfml/lib/")
+
+
 
 #OpenCL
 

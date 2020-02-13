@@ -19,23 +19,39 @@ Meshing::Meshing(int witdh, int height, sf::RenderWindow  *win ){
 }
 
 
-int Meshing::partition_1(){
+
+// not functionnal
+int Meshing::triangulation(int nb_partition){
+    vector<int> H1, H2;
     vector<Point> path;
-    vector<int> H1,H2;
-    path = partition_path();
+    path = partition(points, H1, H2);
+    vector<Triangle>  triangle_listH1;
+    ParDeTri(H1, point_vect_to_vect_edge(path), triangle_listH1);
+    for( int i = 0; i < triangle_listH1.size(); i++){
+        cout << "draw " << i << endl;
+        cout << triangle_listH1[i].one.index << " " << triangle_listH1[i].two.index << " "  << triangle_listH1[i].three.index << " " << endl;
+        draw_triangle(triangle_listH1[i]);
+    }
+    return 1;
+}
+
+
+std::vector<Point> Meshing::partition(std::vector<Point> list_points, vector<int> &H1, vector<int> &H2){
+    vector<Point> path;
+    path = partition_path(list_points);
     int s;
     // fill partitions
-    for(int i = 0; i < points.size(); i++){
-        if ( ! std::count(path.begin(), path.end(), points[i])){
-            s = side(points[i], path);
+    for(int i = 0; i < list_points.size(); i++){
+        if ( ! std::count(path.begin(), path.end(), list_points[i])){
+            s = side(list_points[i], path);
             if ( s < 0){
-                draw_point(points[i].x, points[i].y, sf::Color::Green);
+                draw_point(list_points[i].x, list_points[i].y, sf::Color::Green);
                 H1.push_back(i);
 
             }   
             if( s >= 0)
             {   
-                draw_point(points[i].x, points[i].y, sf::Color::Blue);
+                draw_point(list_points[i].x, list_points[i].y, sf::Color::Blue);
                 H2.push_back(i);
             }
         }
@@ -46,16 +62,7 @@ int Meshing::partition_1(){
         draw_point(path[i].x, path[i].y, sf::Color::Yellow);
 
     }
-    cout << path.size() << endl;
-    vector<Triangle>  triangle_listH1;
-    ParDeTri(H1, point_vect_to_vect_edge(path), triangle_listH1);
-    for( int i = 0; i < triangle_listH1.size(); i++){
-        cout << "draw " << i << endl;
-        cout << triangle_listH1[i].one.index << " " << triangle_listH1[i].two.index << " "  << triangle_listH1[i].three.index << " " << endl;
-        draw_triangle(triangle_listH1[i]);
-    }
-    
-    return 1;
+    return path;
 }
 
 
@@ -63,7 +70,7 @@ void Meshing::ParDeTri(vector<int> point_set, vector<Edge> edge_list, vector<Tri
     int index_nearest_point;
     int it = 0;
     int max_it = 10;
-    while( edge_list.size() > 0 ){
+    while( edge_list.size() > 0 && it < max_it){
         it++;
         cout << "********* edge_list size : " << edge_list.size() << "*************" << endl;
         // pop first edge
@@ -124,13 +131,13 @@ int Meshing::side(Point p, vector<Point> &path){
 
 
 //TODO choose between x or y median
-vector<Point> Meshing::partition_path(){
+vector<Point> Meshing::partition_path(std::vector<Point> &list_points){
     // copy vector
     vector<Point> proj;
     // find median
     std::vector<float> xcoord;
-    for (int i=0; i<points.size(); i++){
-        xcoord.push_back(points[i].x);
+    for (int i=0; i<list_points.size(); i++){
+        xcoord.push_back(list_points[i].x);
      }
     int n = sizeof(xcoord)/sizeof(xcoord[0]); 
     sort(xcoord.begin(),  xcoord.end());
@@ -138,8 +145,8 @@ vector<Point> Meshing::partition_path(){
     
     //3d projection
     vector<Point> hull;
-    for(int i = 0; i < points.size(); i++){
-        proj.push_back(Point(points[i].y,pow(points[i].x-median, 2) + pow(points[i].y,2), points[i].index));
+    for(int i = 0; i < list_points.size(); i++){
+        proj.push_back(Point(list_points[i].y,pow(list_points[i].x-median, 2) + pow(list_points[i].y,2), list_points[i].index));
     }
     // delauney path :
     hull = quickHull(proj);
@@ -148,20 +155,20 @@ vector<Point> Meshing::partition_path(){
     for (int i = 0; i < hull.size()-1; i++ ){
         index = hull[i].index;
         index2 = hull[i+1].index;
-        if(points[index].y > points[index2].y){
-            draw_line(points[index].x, points[index].y, points[index2].x, points[index2].y, sf::Color::Red);
-            path.push_back(points[index]);
+        if(list_points[index].y > list_points[index2].y){
+            draw_line(list_points[index].x, list_points[index].y, list_points[index2].x, list_points[index2].y, sf::Color::Red);
+            path.push_back(list_points[index]);
         }
     }
     index = hull[hull.size()-1].index;
     index2 = hull[0].index;
-    if(points[index].y > points[index2].y){
-        draw_line(points[index].x, points[index].y, points[index2].x, points[index2].y, sf::Color::Red);
-        path.push_back(points[index]);
+    if(list_points[index].y > list_points[index2].y){
+        draw_line(list_points[index].x, list_points[index].y, list_points[index2].x, list_points[index2].y, sf::Color::Red);
+        path.push_back(list_points[index]);
     }        
     
     
-    path.push_back(points[index2]);
+    path.push_back(list_points[index2]);
     return path;
 }
 
@@ -273,7 +280,7 @@ int main(int argc, char **argv){
     sf::RenderWindow window(sf::VideoMode(800, 800), "Delaunay triangulation");
     Meshing mesh = Meshing(800, 800, &window);
     mesh.draw_points();
-    int fin = mesh.partition_1();
+    int fin = mesh.triangulation(1);
 	window.display();
 
 	while (window.isOpen())

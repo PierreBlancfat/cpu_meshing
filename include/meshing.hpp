@@ -21,18 +21,21 @@ class Meshing{
 
         Meshing(int witdh, int height, sf::RenderWindow  *win );
         
+        //  *** triangulation ***
+        int triangulation(int nb_partition);
+        std::vector<Point> partition_path(std::vector<Point> &list_points);
+        std::vector<Point> partition(std::vector<Point> list_points, std::vector<int> &H1, std::vector<int> &H2);
+        void ParDeTri(std::vector<int> points_set, std::vector<Edge> edge_list, std::vector<Triangle> &triangle_list);
+        int nearest_point(std::vector<int> &ps, Edge &e);
+        int convex_hull(Eigen::MatrixXd points);
+        int side(Point p, std::vector<Point> &path);
+
+        // *** Graphic ***
         void draw_point(int x, int y, sf::Color= sf::Color::White);
         void draw_points();
         void draw_points(std::vector<Point> points, sf::Color color = sf::Color::White);
         void draw_line(float x1, float y1, float x2, float y2,  sf::Color color = sf::Color::White);
         void draw_triangle( Triangle t, sf::Color color = sf::Color::White);
-
-        int nearest_point(std::vector<int> &ps, Edge &e);
-        int convex_hull(Eigen::MatrixXd points);
-        int side(Point p, std::vector<Point> &path);
-        int partition_1();
-        void ParDeTri(std::vector<int> points_set, std::vector<Edge> edge_list, std::vector<Triangle> &triangle_list);
-        std::vector<Point> partition_path();
 
 
 };
