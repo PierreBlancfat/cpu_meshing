@@ -12,7 +12,6 @@ int main(int argc, char **argv){
     int fin = mesh.triangulation(1);
 	window.display();
 
-    return 0;
 	while (window.isOpen())
 	{
 		sf::Event event;
@@ -22,7 +21,6 @@ int main(int argc, char **argv){
 				window.close();
 		}
 	}
-
-	return 0;
+	return 1;
 }
  

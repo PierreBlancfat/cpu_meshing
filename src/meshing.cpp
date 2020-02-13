@@ -13,7 +13,7 @@ using namespace Eigen;
 Meshing::Meshing(int witdh, int height, sf::RenderWindow  *win ){
     window = win;
     window->setFramerateLimit(1);
-    MatrixXd points_eigen = MatrixXd::Random(30000,2)*witdh;
+    MatrixXd points_eigen = MatrixXd::Random(30,2)*witdh;
     points_eigen = points_eigen.array().abs();
     
     for(int i = 0; i < points_eigen.rows(); i++){
@@ -25,42 +25,34 @@ Meshing::Meshing(int witdh, int height, sf::RenderWindow  *win ){
 
 // not functionnal
 int Meshing::triangulation(int nb_partition){
-    struct timeval start, end;
-    gettimeofday(&start, NULL);
-
-
-
     long delta = 0;
 
-    vector<int> H1, H2;
-    vector<Point> path;
+    vector<Point> H1, H2, path;
+    vector<Edge> edge_path;
     path = partition(points, H1, H2);
-    vector<Triangle>  triangle_listH1;
+    vector<Triangle>  triangle_list;
+    edge_path = point_vect_to_vect_edge(path);
     // #pragma omp parallel
     // {
-    //     ParDeTri(H1, point_vect_to_vect_edge(path), triangle_listH1);
+    //     ParDeTri(H1, edge_path, triangle_list);
     // }
-    // #pragma omp parallel
+    // #pragma omp parallel 
     // {
-    //     ParDeTri(H2, point_vect_to_vect_edge(path), triangle_listH1);
+    //     ParDeTri(H2, edge_path, triangle_list);
     // }
-        ParDeTri(H1, point_vect_to_vect_edge(path), triangle_listH1);
-        ParDeTri(H2, point_vect_to_vect_edge(path), triangle_listH1);
+    ParDeTri(H1, point_vect_to_vect_edge(path), triangle_list);
+    ParDeTri(H2, point_vect_to_vect_edge(path), triangle_list);
 
-    for( int i = 0; i < triangle_listH1.size(); i++){
+    for( int i = 0; i < triangle_list.size(); i++){
         cout << "draw " << i << endl;
-        cout << triangle_listH1[i].one.index << " " << triangle_listH1[i].two.index << " "  << triangle_listH1[i].three.index << " " << endl;
-        draw_triangle(triangle_listH1[i]);
+        cout << triangle_list[i].one.index << " " << triangle_list[i].two.index << " "  << triangle_list[i].three.index << " " << endl;
+        draw_triangle(triangle_list[i]);
     }
 
-    gettimeofday(&end, NULL);
-    delta = ((end.tv_sec  - start.tv_sec) * 1000000u + end.tv_usec - start.tv_usec) / 1.e6;
-    cout << "time elapse :" << delta << endl;
-    return 1;
 }
 
 
-std::vector<Point> Meshing::partition(std::vector<Point> list_points, vector<int> &H1, vector<int> &H2){
+std::vector<Point> Meshing::partition(std::vector<Point> list_points, vector<Point> &H1, vector<Point> &H2){
     vector<Point> path;
     path = partition_path(list_points);
     int s;
@@ -70,19 +62,19 @@ std::vector<Point> Meshing::partition(std::vector<Point> list_points, vector<int
             s = side(list_points[i], path);
             if ( s < 0){
                 draw_point(list_points[i].x, list_points[i].y, sf::Color::Green);
-                H1.push_back(i);
+                H1.push_back(list_points[i]);
 
             }   
             if( s >= 0)
             {   
                 draw_point(list_points[i].x, list_points[i].y, sf::Color::Blue);
-                H2.push_back(i);
+                H2.push_back(list_points[i]);
             }
         }
     }
     for(int i = 0; i< path.size(); i++){
-        H1.push_back(path[i].index);
-        H2.push_back(path[i].index);
+        H1.push_back(path[i]);
+        H2.push_back(path[i]);
         draw_point(path[i].x, path[i].y, sf::Color::Yellow);
 
     }
@@ -90,7 +82,7 @@ std::vector<Point> Meshing::partition(std::vector<Point> list_points, vector<int
 }
 
 
-void Meshing::ParDeTri(vector<int> point_set, vector<Edge> edge_list, vector<Triangle> &triangle_list){
+void Meshing::ParDeTri(vector<Point> point_set, vector<Edge> edge_list, vector<Triangle> &triangle_list){
     int index_nearest_point;
     int it = 0;
     int max_it = 100;
@@ -104,7 +96,7 @@ void Meshing::ParDeTri(vector<int> point_set, vector<Edge> edge_list, vector<Tri
         // make a delaunay triangle
         index_nearest_point = nearest_point(point_set, e);
         cout << "nearest point :" << index_nearest_point << endl;
-        Triangle t = Triangle(e, points[point_set[index_nearest_point]]);
+        Triangle t = Triangle(e, point_set[index_nearest_point]);
 
         // Update
         if(t.is_triangle()){
@@ -197,12 +189,12 @@ vector<Point> Meshing::partition_path(std::vector<Point> &list_points){
 }
 
 
-int Meshing::nearest_point(vector<int> &ps, Edge &e){
+int Meshing::nearest_point(vector<Point> &ps, Edge &e){
     float min = MAXFLOAT;
     float dis, min_dis;
     int index_min = -1;
     for( int i = 0; i < ps.size(); i++){
-        dis = dd(e, points[ps[i]]);
+        dis = dd(e, ps[i]);
         // cout << "dis " << dis << " " << i << endl;
         if( min > dis){
             min = dis;
