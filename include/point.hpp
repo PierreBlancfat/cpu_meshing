@@ -21,6 +21,7 @@ struct Edge {
 	int index;
 	Point one, two;
 	Edge(Point one, Point two, int ind = -1) : one(one), two(two), index(ind){};
+	Edge(const Edge &e) : one(e.one), two(e.two), index(e.index){};
 	Edge();
 	bool operator==(Edge a) const {
       if(a.one==one && a.two == two || a.one==two && a.two == one){
@@ -45,6 +46,14 @@ struct Triangle {
 			return false;
 		}
 		return true;
+	}
+	bool operator==(Triangle t) const {
+      if((t.one == one || t.two == one || t.three == one) && (t.one == two || t.two == two || t.three == two) && (t.one == three || t.two == three || t.three == three) ){
+         return true;
+	  }
+      else{
+         return false;
+	  }
 	}
 };
 

@@ -1,1 +1,0 @@
-/usr/bin/c++    -rdynamic CMakeFiles/hull.dir/hull.cpp.o  -o ../../bin/hull  -L/home/polo/work/siam/GPU/gpu_project/./sfml/lib 

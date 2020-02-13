@@ -10,7 +10,7 @@ using namespace Eigen;
 Meshing::Meshing(int witdh, int height, sf::RenderWindow  *win ){
     window = win;
     window->setFramerateLimit(1);
-    MatrixXd points_eigen = MatrixXd::Random(12,2)*witdh;
+    MatrixXd points_eigen = MatrixXd::Random(3,2)*witdh;
     points_eigen = points_eigen.array().abs();
 
     for(int i = 0; i < points_eigen.rows(); i++){
@@ -48,10 +48,10 @@ int Meshing::partition_1(){
     }
     cout << path.size() << endl;
     vector<Triangle>  triangle_listH1;
-    triangle_listH1 = ParDeTri(H1, point_vect_to_vect_edge(path));
-
+    ParDeTri(H1, point_vect_to_vect_edge(path), triangle_listH1);
     for( int i = 0; i < triangle_listH1.size(); i++){
         cout << "draw " << i << endl;
+        cout << triangle_listH1[i].one.index << " " << triangle_listH1[i].two.index << " "  << triangle_listH1[i].three.index << " " << endl;
         draw_triangle(triangle_listH1[i]);
     }
     
@@ -59,47 +59,49 @@ int Meshing::partition_1(){
 }
 
 
-vector<Triangle> Meshing::ParDeTri(vector<int> H, vector<Edge> path){
-    vector<Triangle> triangle_list;
+void Meshing::ParDeTri(vector<int> point_set, vector<Edge> edge_list, vector<Triangle> &triangle_list){
     int index_nearest_point;
-    Triangle t();
-    while( path.size() > 0){
-        cout << "**** path size : " << path.size() << "****" << endl;
+    int it = 0;
+    int max_it = 10;
+    while( edge_list.size() > 0 ){
+        it++;
+        cout << "********* edge_list size : " << edge_list.size() << "*************" << endl;
         // pop first edge
+        Edge e = Edge(edge_list[0].one, edge_list[0].two);
+        edge_list.erase(edge_list.begin());
+
         // make a delaunay triangle
-        index_nearest_point = nearest_point(H, path[0]);
-        if(index_nearest_point == -1){
-            return triangle_list;
-        }
+        index_nearest_point = nearest_point(point_set, e);
         cout << "nearest point :" << index_nearest_point << endl;
-        Triangle t = Triangle(path[0], points[H[index_nearest_point]]);
+        Triangle t = Triangle(e, points[point_set[index_nearest_point]]);
+
+        // Update
         if(t.is_triangle()){
             triangle_list.push_back(t);
-
-            if( path.size() > 0 ){
-                // Update
-                update(Edge(t.one, t.three), path);
-                update(Edge(t.two, t.three), path);
-            }
+            update(Edge(t.one, t.three), edge_list);
+            update(Edge(t.two, t.three), edge_list);
         }
+        else
+            cout <<  "not triangle" << endl;
     }
-    cout << " finished ParDeTri " << endl;
-    return triangle_list;
+    cout <<  "finished" << endl;
+    return;
 }
 
-void update(Edge e, vector<Edge> &path){
-    for( int i = 0; i < path.size(); i++){   
-        // cout << e.one.x << " " << e.one.y << " " << e.two.x << " " << e.two.y << endl;
-        // cout << path[i].one.x << " " << path[i].one.y << " " << path[i].two.x << " " << path[i].two.y << endl;
-        if(e == path[i]){
-            path.erase(path.begin()+i);
-            cout << "############## erase " << i << endl;
-            return;
+void update(Edge e, vector<Edge> &edge_list){
+    bool find = false;
+    for( int i = 0; i < edge_list.size(); i++){   
+        if(e == edge_list[i]){
+            edge_list.erase(edge_list.begin()+i);
+            cout << "#### erase " << i << endl;
+            find = true;
         }
     }
-    cout << "#### push back  " << e.one.index<<  endl;
-    path.push_back(e);
-    return;
+    if(find == false){
+        cout << "#### push back  " << e.one.index <<  endl;
+        edge_list.push_back(e);
+    }
+
 }
 
 
@@ -166,25 +168,24 @@ vector<Point> Meshing::partition_path(){
 
 int Meshing::nearest_point(vector<int> &ps, Edge &e){
     float min = MAXFLOAT;
-    float dis;
+    float dis, min_dis;
     int index_min = -1;
     for( int i = 0; i < ps.size(); i++){
         dis = dd(e, points[ps[i]]);
-        cout << "dis " << dis << endl;
+        cout << "dis " << dis << " " << i << endl;
         if( min > dis){
             min = dis;
             index_min  = i;
+            min_dis = dis;
         }   
     }
+    cout << "dis" << index_min << " "  << min_dis << endl;
     return index_min;
 }
 
 float dd(Edge e, Point p){
     float n_ab, n_ac, n_bc, circumradius;
 
-    if( !Triangle(e,p).is_triangle()){
-        return MAXFLOAT;
-    }
     Vector2f ab = {e.one.x - e.two.x, e.one.y - e.two.y};
     Vector2f ac = {e.one.x - p.x, e.one.y - p.y};
     Vector2f bc = {p.x - e.two.x, p.y - e.two.y};
@@ -192,15 +193,19 @@ float dd(Edge e, Point p){
     n_ab = ab.norm();
     n_ac = ac.norm();
     n_bc = bc.norm();
+    if (n_ab == 0 || n_ac == 0 || n_bc == 0){
+        return MAXFLOAT;
+    }
 
-    circumradius = (n_ab * n_ac * n_bc)/ sqrt(((n_ab+n_ac+n_bc)*(n_ac+n_bc-n_ab)*(n_bc+n_ab-n_ac)*(n_ab+n_ac-n_bc)));
-    float bac = acos(-ab.dot(-ac)/(n_ab*n_ac));
-    float abc = acos(-ab.dot(-bc)/(n_ab*n_bc));
-    float bca = acos(-ac.dot(bc)/(n_ac*n_bc));
+    circumradius = (n_ab * n_ac * n_bc)/ sqrt((n_ab+n_ac+n_bc)*(n_ac+n_bc-n_ab)*(n_bc+n_ab-n_ac)*(n_ab+n_ac-n_bc));
+
+    float bac = acos(ab.dot(ac)/(n_ab*n_ac));
+    float abc = acos(ab.dot(bc)/(n_ab*n_bc));
+    float bca = acos(ac.dot(-bc)/(n_ac*n_bc));
     
     // obtute ? -circumdius
     // cout << bac + abc + bca << endl;
-    if (bac > 3.1415/2 || abc > 3.1415/2||bca > 3.1415/2){
+    if (bac < 3.1415/2 && abc < 3.1415/2 && bca < 3.1415/2){
         return circumradius;
     }
     return -circumradius;
@@ -269,7 +274,6 @@ int main(int argc, char **argv){
     Meshing mesh = Meshing(800, 800, &window);
     mesh.draw_points();
     int fin = mesh.partition_1();
-
 	window.display();
 
 	while (window.isOpen())

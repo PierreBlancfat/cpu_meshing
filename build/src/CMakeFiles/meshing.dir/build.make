@@ -60,15 +60,15 @@ include src/CMakeFiles/meshing.dir/flags.make
 src/CMakeFiles/meshing.dir/meshing.cpp.o: src/CMakeFiles/meshing.dir/flags.make
 src/CMakeFiles/meshing.dir/meshing.cpp.o: ../src/meshing.cpp
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/polo/work/siam/GPU/gpu_project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object src/CMakeFiles/meshing.dir/meshing.cpp.o"
-	cd /home/polo/work/siam/GPU/gpu_project/build/src && /bin/g++-8  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/meshing.dir/meshing.cpp.o -c /home/polo/work/siam/GPU/gpu_project/src/meshing.cpp
+	cd /home/polo/work/siam/GPU/gpu_project/build/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/meshing.dir/meshing.cpp.o -c /home/polo/work/siam/GPU/gpu_project/src/meshing.cpp
 
 src/CMakeFiles/meshing.dir/meshing.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/meshing.dir/meshing.cpp.i"
-	cd /home/polo/work/siam/GPU/gpu_project/build/src && /bin/g++-8 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/polo/work/siam/GPU/gpu_project/src/meshing.cpp > CMakeFiles/meshing.dir/meshing.cpp.i
+	cd /home/polo/work/siam/GPU/gpu_project/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/polo/work/siam/GPU/gpu_project/src/meshing.cpp > CMakeFiles/meshing.dir/meshing.cpp.i
 
 src/CMakeFiles/meshing.dir/meshing.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/meshing.dir/meshing.cpp.s"
-	cd /home/polo/work/siam/GPU/gpu_project/build/src && /bin/g++-8 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/polo/work/siam/GPU/gpu_project/src/meshing.cpp -o CMakeFiles/meshing.dir/meshing.cpp.s
+	cd /home/polo/work/siam/GPU/gpu_project/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/polo/work/siam/GPU/gpu_project/src/meshing.cpp -o CMakeFiles/meshing.dir/meshing.cpp.s
 
 # Object files for target meshing
 meshing_OBJECTS = \

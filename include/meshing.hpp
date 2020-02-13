@@ -7,7 +7,7 @@
 #include <vector>
 #include <Eigen/Dense>
 #include <SFML/Graphics.hpp>
-
+// #include <CL/cl.h>
 #include "hull.hpp"
 
 class Meshing{
@@ -31,7 +31,7 @@ class Meshing{
         int convex_hull(Eigen::MatrixXd points);
         int side(Point p, std::vector<Point> &path);
         int partition_1();
-        std::vector<Triangle> ParDeTri(std::vector<int> points_set, std::vector<Edge> edge_list);
+        void ParDeTri(std::vector<int> points_set, std::vector<Edge> edge_list, std::vector<Triangle> &triangle_list);
         std::vector<Point> partition_path();
 
 
