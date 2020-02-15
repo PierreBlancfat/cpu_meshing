@@ -60,54 +60,54 @@ include src/CMakeFiles/gpu_project.dir/flags.make
 src/CMakeFiles/gpu_project.dir/meshing.cpp.o: src/CMakeFiles/gpu_project.dir/flags.make
 src/CMakeFiles/gpu_project.dir/meshing.cpp.o: ../src/meshing.cpp
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/polo/work/siam/GPU/gpu_project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object src/CMakeFiles/gpu_project.dir/meshing.cpp.o"
-	cd /home/polo/work/siam/GPU/gpu_project/build/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/gpu_project.dir/meshing.cpp.o -c /home/polo/work/siam/GPU/gpu_project/src/meshing.cpp
+	cd /home/polo/work/siam/GPU/gpu_project/build/src && /bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/gpu_project.dir/meshing.cpp.o -c /home/polo/work/siam/GPU/gpu_project/src/meshing.cpp
 
 src/CMakeFiles/gpu_project.dir/meshing.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/gpu_project.dir/meshing.cpp.i"
-	cd /home/polo/work/siam/GPU/gpu_project/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/polo/work/siam/GPU/gpu_project/src/meshing.cpp > CMakeFiles/gpu_project.dir/meshing.cpp.i
+	cd /home/polo/work/siam/GPU/gpu_project/build/src && /bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/polo/work/siam/GPU/gpu_project/src/meshing.cpp > CMakeFiles/gpu_project.dir/meshing.cpp.i
 
 src/CMakeFiles/gpu_project.dir/meshing.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/gpu_project.dir/meshing.cpp.s"
-	cd /home/polo/work/siam/GPU/gpu_project/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/polo/work/siam/GPU/gpu_project/src/meshing.cpp -o CMakeFiles/gpu_project.dir/meshing.cpp.s
+	cd /home/polo/work/siam/GPU/gpu_project/build/src && /bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/polo/work/siam/GPU/gpu_project/src/meshing.cpp -o CMakeFiles/gpu_project.dir/meshing.cpp.s
 
 src/CMakeFiles/gpu_project.dir/hull.cpp.o: src/CMakeFiles/gpu_project.dir/flags.make
 src/CMakeFiles/gpu_project.dir/hull.cpp.o: ../src/hull.cpp
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/polo/work/siam/GPU/gpu_project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object src/CMakeFiles/gpu_project.dir/hull.cpp.o"
-	cd /home/polo/work/siam/GPU/gpu_project/build/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/gpu_project.dir/hull.cpp.o -c /home/polo/work/siam/GPU/gpu_project/src/hull.cpp
+	cd /home/polo/work/siam/GPU/gpu_project/build/src && /bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/gpu_project.dir/hull.cpp.o -c /home/polo/work/siam/GPU/gpu_project/src/hull.cpp
 
 src/CMakeFiles/gpu_project.dir/hull.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/gpu_project.dir/hull.cpp.i"
-	cd /home/polo/work/siam/GPU/gpu_project/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/polo/work/siam/GPU/gpu_project/src/hull.cpp > CMakeFiles/gpu_project.dir/hull.cpp.i
+	cd /home/polo/work/siam/GPU/gpu_project/build/src && /bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/polo/work/siam/GPU/gpu_project/src/hull.cpp > CMakeFiles/gpu_project.dir/hull.cpp.i
 
 src/CMakeFiles/gpu_project.dir/hull.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/gpu_project.dir/hull.cpp.s"
-	cd /home/polo/work/siam/GPU/gpu_project/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/polo/work/siam/GPU/gpu_project/src/hull.cpp -o CMakeFiles/gpu_project.dir/hull.cpp.s
+	cd /home/polo/work/siam/GPU/gpu_project/build/src && /bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/polo/work/siam/GPU/gpu_project/src/hull.cpp -o CMakeFiles/gpu_project.dir/hull.cpp.s
 
 src/CMakeFiles/gpu_project.dir/triangulation.cpp.o: src/CMakeFiles/gpu_project.dir/flags.make
 src/CMakeFiles/gpu_project.dir/triangulation.cpp.o: ../src/triangulation.cpp
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/polo/work/siam/GPU/gpu_project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object src/CMakeFiles/gpu_project.dir/triangulation.cpp.o"
-	cd /home/polo/work/siam/GPU/gpu_project/build/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/gpu_project.dir/triangulation.cpp.o -c /home/polo/work/siam/GPU/gpu_project/src/triangulation.cpp
+	cd /home/polo/work/siam/GPU/gpu_project/build/src && /bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/gpu_project.dir/triangulation.cpp.o -c /home/polo/work/siam/GPU/gpu_project/src/triangulation.cpp
 
 src/CMakeFiles/gpu_project.dir/triangulation.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/gpu_project.dir/triangulation.cpp.i"
-	cd /home/polo/work/siam/GPU/gpu_project/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/polo/work/siam/GPU/gpu_project/src/triangulation.cpp > CMakeFiles/gpu_project.dir/triangulation.cpp.i
+	cd /home/polo/work/siam/GPU/gpu_project/build/src && /bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/polo/work/siam/GPU/gpu_project/src/triangulation.cpp > CMakeFiles/gpu_project.dir/triangulation.cpp.i
 
 src/CMakeFiles/gpu_project.dir/triangulation.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/gpu_project.dir/triangulation.cpp.s"
-	cd /home/polo/work/siam/GPU/gpu_project/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/polo/work/siam/GPU/gpu_project/src/triangulation.cpp -o CMakeFiles/gpu_project.dir/triangulation.cpp.s
+	cd /home/polo/work/siam/GPU/gpu_project/build/src && /bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/polo/work/siam/GPU/gpu_project/src/triangulation.cpp -o CMakeFiles/gpu_project.dir/triangulation.cpp.s
 
 src/CMakeFiles/gpu_project.dir/performance.cpp.o: src/CMakeFiles/gpu_project.dir/flags.make
 src/CMakeFiles/gpu_project.dir/performance.cpp.o: ../src/performance.cpp
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/polo/work/siam/GPU/gpu_project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object src/CMakeFiles/gpu_project.dir/performance.cpp.o"
-	cd /home/polo/work/siam/GPU/gpu_project/build/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/gpu_project.dir/performance.cpp.o -c /home/polo/work/siam/GPU/gpu_project/src/performance.cpp
+	cd /home/polo/work/siam/GPU/gpu_project/build/src && /bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/gpu_project.dir/performance.cpp.o -c /home/polo/work/siam/GPU/gpu_project/src/performance.cpp
 
 src/CMakeFiles/gpu_project.dir/performance.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/gpu_project.dir/performance.cpp.i"
-	cd /home/polo/work/siam/GPU/gpu_project/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/polo/work/siam/GPU/gpu_project/src/performance.cpp > CMakeFiles/gpu_project.dir/performance.cpp.i
+	cd /home/polo/work/siam/GPU/gpu_project/build/src && /bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/polo/work/siam/GPU/gpu_project/src/performance.cpp > CMakeFiles/gpu_project.dir/performance.cpp.i
 
 src/CMakeFiles/gpu_project.dir/performance.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/gpu_project.dir/performance.cpp.s"
-	cd /home/polo/work/siam/GPU/gpu_project/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/polo/work/siam/GPU/gpu_project/src/performance.cpp -o CMakeFiles/gpu_project.dir/performance.cpp.s
+	cd /home/polo/work/siam/GPU/gpu_project/build/src && /bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/polo/work/siam/GPU/gpu_project/src/performance.cpp -o CMakeFiles/gpu_project.dir/performance.cpp.s
 
 # Object files for target gpu_project
 gpu_project_OBJECTS = \

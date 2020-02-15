@@ -1,2 +1,2 @@
-/usr/bin/ar qc libgpu_project.a  CMakeFiles/gpu_project.dir/meshing.cpp.o CMakeFiles/gpu_project.dir/hull.cpp.o CMakeFiles/gpu_project.dir/triangulation.cpp.o CMakeFiles/gpu_project.dir/performance.cpp.o
-/usr/bin/ranlib libgpu_project.a
+/bin/ar qc libgpu_project.a  CMakeFiles/gpu_project.dir/meshing.cpp.o CMakeFiles/gpu_project.dir/hull.cpp.o CMakeFiles/gpu_project.dir/triangulation.cpp.o CMakeFiles/gpu_project.dir/performance.cpp.o
+/bin/ranlib libgpu_project.a

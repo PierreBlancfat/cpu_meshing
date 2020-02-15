@@ -60,15 +60,15 @@ include src/CMakeFiles/performance.dir/flags.make
 src/CMakeFiles/performance.dir/performance.cpp.o: src/CMakeFiles/performance.dir/flags.make
 src/CMakeFiles/performance.dir/performance.cpp.o: ../src/performance.cpp
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/polo/work/siam/GPU/gpu_project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object src/CMakeFiles/performance.dir/performance.cpp.o"
-	cd /home/polo/work/siam/GPU/gpu_project/build/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/performance.dir/performance.cpp.o -c /home/polo/work/siam/GPU/gpu_project/src/performance.cpp
+	cd /home/polo/work/siam/GPU/gpu_project/build/src && /bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/performance.dir/performance.cpp.o -c /home/polo/work/siam/GPU/gpu_project/src/performance.cpp
 
 src/CMakeFiles/performance.dir/performance.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/performance.dir/performance.cpp.i"
-	cd /home/polo/work/siam/GPU/gpu_project/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/polo/work/siam/GPU/gpu_project/src/performance.cpp > CMakeFiles/performance.dir/performance.cpp.i
+	cd /home/polo/work/siam/GPU/gpu_project/build/src && /bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/polo/work/siam/GPU/gpu_project/src/performance.cpp > CMakeFiles/performance.dir/performance.cpp.i
 
 src/CMakeFiles/performance.dir/performance.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/performance.dir/performance.cpp.s"
-	cd /home/polo/work/siam/GPU/gpu_project/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/polo/work/siam/GPU/gpu_project/src/performance.cpp -o CMakeFiles/performance.dir/performance.cpp.s
+	cd /home/polo/work/siam/GPU/gpu_project/build/src && /bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/polo/work/siam/GPU/gpu_project/src/performance.cpp -o CMakeFiles/performance.dir/performance.cpp.s
 
 # Object files for target performance
 performance_OBJECTS = \

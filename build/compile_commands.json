@@ -1,0 +1,32 @@
+[
+{
+  "directory": "/home/polo/work/siam/GPU/gpu_project/build/src",
+  "command": "/bin/c++   -I/usr/include/eigen3 -I/home/polo/work/siam/GPU/gpu_project/include   -fopenmp -g   -fopenmp -o CMakeFiles/performance.dir/performance.cpp.o -c /home/polo/work/siam/GPU/gpu_project/src/performance.cpp",
+  "file": "/home/polo/work/siam/GPU/gpu_project/src/performance.cpp"
+},
+{
+  "directory": "/home/polo/work/siam/GPU/gpu_project/build/src",
+  "command": "/bin/c++   -I/usr/include/eigen3 -I/home/polo/work/siam/GPU/gpu_project/include   -fopenmp -g   -fopenmp -o CMakeFiles/gpu_project.dir/meshing.cpp.o -c /home/polo/work/siam/GPU/gpu_project/src/meshing.cpp",
+  "file": "/home/polo/work/siam/GPU/gpu_project/src/meshing.cpp"
+},
+{
+  "directory": "/home/polo/work/siam/GPU/gpu_project/build/src",
+  "command": "/bin/c++   -I/usr/include/eigen3 -I/home/polo/work/siam/GPU/gpu_project/include   -fopenmp -g   -fopenmp -o CMakeFiles/gpu_project.dir/hull.cpp.o -c /home/polo/work/siam/GPU/gpu_project/src/hull.cpp",
+  "file": "/home/polo/work/siam/GPU/gpu_project/src/hull.cpp"
+},
+{
+  "directory": "/home/polo/work/siam/GPU/gpu_project/build/src",
+  "command": "/bin/c++   -I/usr/include/eigen3 -I/home/polo/work/siam/GPU/gpu_project/include   -fopenmp -g   -fopenmp -o CMakeFiles/gpu_project.dir/triangulation.cpp.o -c /home/polo/work/siam/GPU/gpu_project/src/triangulation.cpp",
+  "file": "/home/polo/work/siam/GPU/gpu_project/src/triangulation.cpp"
+},
+{
+  "directory": "/home/polo/work/siam/GPU/gpu_project/build/src",
+  "command": "/bin/c++   -I/usr/include/eigen3 -I/home/polo/work/siam/GPU/gpu_project/include   -fopenmp -g   -fopenmp -o CMakeFiles/gpu_project.dir/performance.cpp.o -c /home/polo/work/siam/GPU/gpu_project/src/performance.cpp",
+  "file": "/home/polo/work/siam/GPU/gpu_project/src/performance.cpp"
+},
+{
+  "directory": "/home/polo/work/siam/GPU/gpu_project/build/src",
+  "command": "/bin/c++   -I/usr/include/eigen3 -I/home/polo/work/siam/GPU/gpu_project/include   -fopenmp -g   -fopenmp -o CMakeFiles/triangulation.dir/triangulation.cpp.o -c /home/polo/work/siam/GPU/gpu_project/src/triangulation.cpp",
+  "file": "/home/polo/work/siam/GPU/gpu_project/src/triangulation.cpp"
+}
+]

@@ -23,7 +23,7 @@ using namespace Eigen;
 Meshing::Meshing(int witdh, int height, sf::RenderWindow  *win ){
     window = win;
     window->setFramerateLimit(1);
-    MatrixXd points_eigen = MatrixXd::Random(200,2)*witdh;
+    MatrixXd points_eigen = MatrixXd::Random(400,2)*witdh;
     points_eigen = points_eigen.array().abs();
     
     for(int i = 0; i < points_eigen.rows(); i++){
@@ -40,7 +40,7 @@ int Meshing::triangulation(int nb_partition){
 
     for( int i = 0; i < nb_partition; i++){
         vector<Point> H1, H2, path;
-        path = partition(points, H1, H2,  true);
+        path = partition(points, H1, H2, true);
         edge_path = point_vect_to_vect_edge(path);
         Partition P1 = Partition(H1, edge_path);
         Partition P2 = Partition(H2, edge_path);
@@ -64,7 +64,7 @@ int Meshing::triangulation_rec(int nb_partition){
     vector<Partition> partitions;
     vector<Point> path;
     vector<Triangle>  triangle_list;
-    partitionRec(points, path, false, nb_partition,partitions);
+    partitionRec(points, path, true, nb_partition,partitions);
 
 
     return 1;
@@ -81,28 +81,27 @@ int Meshing::triangulation_rec(int nb_partition){
 }
 
 
-void Meshing::partitionRec(vector<Point> points_set, vector<Point> Edges, bool vertical, int deph_rec, vector<Partition> &partitions){
+void Meshing::partitionRec(vector<Point> points_set, vector<Point> old_path, bool vertical, int deph_rec, vector<Partition> &partitions){
     if( deph_rec > 1){
         vector<Point> H1, H2, path;
-        path = partition(points_set, H1, H2, vertical);
+        path = partition(points_set, H1, H2, vertical, old_path);
         partitionRec(H1, path, !vertical, deph_rec-1, partitions);
         partitionRec(H2, path, !vertical, deph_rec-1, partitions);
     }
     else{
         vector<Point> H1, H2, path;
         vector<Edge> edge_path;
-        path = partition(points_set, H1, H2, vertical);
-        cout << "H1 size " << H1.size() << endl;
-        cout << "H2 size " << H2.size() << endl;
+        path = partition(points_set, H1, H2, vertical, old_path);
         edge_path = point_vect_to_vect_edge(path);
         partitions.push_back(Partition(H1, edge_path));
         partitions.push_back(Partition(H2, edge_path));
     }
 }
 
-std::vector<Point> Meshing::partition(std::vector<Point> list_points, vector<Point> &H1, vector<Point> &H2, bool vertical){
+
+std::vector<Point> Meshing::partition(std::vector<Point> list_points, vector<Point> &H1, vector<Point> &H2, bool vertical, vector<Point> old_path){
     vector<Point> path;
-    path = partition_path(list_points, vertical);
+    path = partition_path(list_points, vertical, old_path);
     int s;
     cout << " ********** partition ******" << endl;
     // fill partitions
@@ -122,7 +121,6 @@ std::vector<Point> Meshing::partition(std::vector<Point> list_points, vector<Poi
         }
     }
     for(int i = 0; i< path.size(); i++){
-        cout <<  path[i].index << " " << path[i].x << " " << path[i].y << endl;
         H1.push_back(path[i]);
         H2.push_back(path[i]);
         draw_point(path[i].x, path[i].y, sf::Color::Yellow);
@@ -133,7 +131,7 @@ std::vector<Point> Meshing::partition(std::vector<Point> list_points, vector<Poi
 
 
 //TODO choose between x or y median
-vector<Point> Meshing::partition_path(std::vector<Point> list_points, bool vertical){
+vector<Point> Meshing::partition_path(std::vector<Point> list_points, bool vertical, vector<Point> old_path){
     // copy vector
     vector<Point> proj;
 
@@ -169,34 +167,89 @@ vector<Point> Meshing::partition_path(std::vector<Point> list_points, bool verti
     // delauney path :
     hull = quickHull(proj);
 
+    float tolerance = 50;
+
+    // fill path
     vector<Point> path;
     int index, index2;
+    bool not_in_path =  true;
     for (int i = 0; i < hull.size()-1; i++ ){
         index = hull[i].index;
         index2 = hull[i+1].index;
-        cout << index << " " << index2 << endl;
-        if(points[index].y > points[index2].y && vertical == true ){
-            draw_line(points[index].x, points[index].y, points[index2].x, points[index2].y, sf::Color::Red);
-            path.push_back(points[index]);
+        not_in_path =  true;
+
+        if( !old_path.empty()){
+            not_in_path =  not_in_vect(old_path, points[index]);
         }
-        if(points[index].x  >points[index2].x && vertical == false ){
-            draw_line(points[index].x, points[index].y, points[index2].x, points[index2].y, sf::Color::Magenta);
-            path.push_back(points[index]);
+
+        if( vertical == true ){
+            if(points[index].y > points[index2].y){
+                if(!not_in_path && (points[index].x - tolerance < median &&  points[index].x + tolerance > median )){
+                    draw_line(points[index].x, points[index].y, points[index2].x, points[index2].y, sf::Color::Red);
+                    path.push_back(points[index]);
+                }
+                else if (not_in_path){
+                    draw_line(points[index].x, points[index].y, points[index2].x, points[index2].y, sf::Color::Red);
+                    path.push_back(points[index]);
+                }
+
+            }
+        }
+        else
+        {
+            if(points[index].x > points[index2].x){
+                if(!not_in_path && (points[index].y - tolerance < median &&  points[index].y + tolerance > median )){
+                    draw_line(points[index].x, points[index].y, points[index2].x, points[index2].y, sf::Color::Yellow);
+                    path.push_back(points[index]);
+                }
+                else if (not_in_path){
+                    draw_line(points[index].x, points[index].y, points[index2].x, points[index2].y, sf::Color::Yellow);
+                    path.push_back(points[index]);
+                }
+            }
         }
     }
 
     index = hull[hull.size()-1].index;
     index2 = hull[0].index;
-    if(points[index].y > points[index2].y && vertical == true){
-        draw_line(points[index].x, points[index].y, points[index2].x, points[index2].y, sf::Color::Red);
-        path.push_back(points[index]);
-    }
-    if(points[index].x  > points[index2].x && vertical == false ){
-        draw_line(points[index].x, points[index].y, points[index2].x, points[index2].y, sf::Color::Magenta);
-        path.push_back(points[index]);
-    }        
     
-    path.push_back(points[index2]);
+    if(!old_path.empty()){
+        not_in_path =  not_in_vect(old_path, points[index]);
+    }
+    
+    if( vertical == true ){
+        if(points[index].y > points[index2].y){
+            if(!not_in_path && (points[index].x - tolerance < median &&  points[index].x + tolerance > median )){
+                draw_line(points[index].x, points[index].y, points[index2].x, points[index2].y, sf::Color::Red);
+                path.push_back(points[index]);
+            }
+            else if (not_in_path){
+            
+                draw_line(points[index].x, points[index].y, points[index2].x, points[index2].y, sf::Color::Red);
+                path.push_back(points[index]);
+            
+            }
+        }
+    }
+    else
+    {
+        if(points[index].x > points[index2].x){
+            if(!not_in_path && (points[index].y - tolerance < median && points[index].y + tolerance > median )){
+                draw_line(points[index].x, points[index].y, points[index2].x, points[index2].y, sf::Color::Yellow);
+                cout <<  points[index].x  << " "  << points[index].y << endl;
+                cout <<  points[index2].x  << " "  << points[index2].y << endl;
+                bool test = points[index].x  > points[index2].x ;
+                cout << test << endl;
+
+                path.push_back(points[index]);
+            }
+            else if (not_in_path){
+                draw_line(points[index].x, points[index].y, points[index2].x, points[index2].y, sf::Color::Yellow);
+                path.push_back(points[index]);
+            }
+        }
+    }
+
     return path;
 }
 
@@ -265,7 +318,6 @@ int Meshing::side(Point p, vector<Point> &path, bool vertical){
     }
     else{
         for(int i = 1; i < path.size(); i++){
-
             if( p.x <= path[i-1].x && p.x > path[i].x){
                 return  (p.x - path[i-1].x) * (path[i].y - path[i-1].y) -  (p.y- path[i-1].y) * (path[i].x -path[i-1].x);
             }
@@ -294,14 +346,12 @@ int Meshing::nearest_point(vector<Point> &ps, Edge &e){
     int index_min = -1;
     for( int i = 0; i < ps.size(); i++){
         dis = dd2(e, ps[i]);
-        // cout << "dis " << dis << " " << i << endl;
         if( min > dis ){
             min = dis;
             index_min  = i;
             min_dis = dis;
         }   
     }
-    // cout << "dis" << index_min << " "  << min_dis << endl;
     return index_min;
 }
 
@@ -383,7 +433,6 @@ float dd(Edge e, Point p){
     pdd C = make_pair(p.x, p.y);
 
     Point c = findCircumCenter(A, B, C);
-    // cout << " center " << c.x << " " << c.y << endl;
     Point median_e = Point((e.one.x + e.two.x)/2 , (e.one.y + e.two.y)/2);
     Vector2f vect_med_center = {median_e.x - c.x, median_e.y - c.y};
     Vector2f vect_med_p = {median_e.x - p.x, median_e.y - p.y};
@@ -395,7 +444,6 @@ float dd(Edge e, Point p){
     return circumradius;
 
     // obtute ? -circumdius
-    // cout << bac <<  abc <<  bca << endl;
     if (bac < 3.1415/2 && abc < 3.1415/2 && bca < 3.1415/2){
         return circumradius;
     }
@@ -487,6 +535,16 @@ vector<Edge> point_vect_to_vect_edge(vector<Point> &ps){
     return edges;
 }
 
+
+bool not_in_vect(vector<Point> vect_point, Point p){
+    for( int i = 0; i < vect_point.size(); i++){
+        if(p == vect_point[i]){
+            return false;
+        }
+    }
+    return true;
+}
+
 // GRAPHIC
 
 void Meshing::draw_point(int x, int y, sf::Color color){
@@ -528,7 +586,7 @@ void Meshing::draw_triangle( Triangle t, sf::Color color){
 
 int points_to_matrix(vector<Point> vect_points){
     for( int i = 0; i < vect_points.size(); i++){
-        std:cout << i << std::endl;
+        // std:cout << i << std::endl;
     }
     return 1;
 }

@@ -44,25 +44,9 @@ hull.hpp
 vector
 -
 
-/home/polo/work/siam/GPU/gpu_project/src/circumcenter.cpp
-iostream
--
-cfloat
--
-point.hpp
-/home/polo/work/siam/GPU/gpu_project/src/point.hpp
-
-/home/polo/work/siam/GPU/gpu_project/src/hull.cpp
-hull.hpp
-/home/polo/work/siam/GPU/gpu_project/src/hull.hpp
-
-/home/polo/work/siam/GPU/gpu_project/src/meshing.cpp
+/home/polo/work/siam/GPU/gpu_project/src/triangulation.cpp
 meshing.hpp
-/home/polo/work/siam/GPU/gpu_project/src/meshing.hpp
-hull.cpp
-/home/polo/work/siam/GPU/gpu_project/src/hull.cpp
-circumcenter.cpp
-/home/polo/work/siam/GPU/gpu_project/src/circumcenter.cpp
+-
 
 /usr/include/eigen3/Eigen/Cholesky
 Core

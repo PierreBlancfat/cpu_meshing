@@ -14,6 +14,7 @@
 #include <omp.h>
 #include "hull.hpp"
 
+static std::vector<Point> DEFAULT_VECTOR;
 class Meshing{
 
     private:
@@ -28,8 +29,8 @@ class Meshing{
         //  *** triangulation ***
         int triangulation(int nb_partition);
         int triangulation_rec(int nb_partition);
-        std::vector<Point> partition_path(std::vector<Point> list_points, bool vertical);
-        std::vector<Point> partition(std::vector<Point> list_points, std::vector<Point> &H1, std::vector<Point> &H2, bool vertical);
+        std::vector<Point> partition(std::vector<Point> list_points, std::vector<Point> &H1, std::vector<Point> &H2,  bool vertical, std::vector<Point> old_path =  DEFAULT_VECTOR);
+        std::vector<Point> partition_path(std::vector<Point> list_points, bool vertical, std::vector<Point> old_path =  DEFAULT_VECTOR);
         void partitionRec(std::vector<Point> points_set, std::vector<Point> Edges, bool vertival, int deph_rec, std::vector<Partition> &partitions);
         void ParDeTri(std::vector<Point> points_set, std::vector<Edge> edge_list, std::vector<Triangle> &triangle_list);
         int nearest_point_gpu(std::vector<Point> &ps, Edge &e);
@@ -48,6 +49,9 @@ class Meshing{
 
 };
 
+
+
+bool not_in_vect(std::vector<Point> vect_point, Point p);
 float dd(Edge e, Point p);
 float dd2(Edge e, Point p);
 std::vector<Edge> point_vect_to_vect_edge(std::vector<Point> &ps);

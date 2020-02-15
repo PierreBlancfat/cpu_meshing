@@ -60,15 +60,15 @@ include src/CMakeFiles/triangulation.dir/flags.make
 src/CMakeFiles/triangulation.dir/triangulation.cpp.o: src/CMakeFiles/triangulation.dir/flags.make
 src/CMakeFiles/triangulation.dir/triangulation.cpp.o: ../src/triangulation.cpp
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/polo/work/siam/GPU/gpu_project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object src/CMakeFiles/triangulation.dir/triangulation.cpp.o"
-	cd /home/polo/work/siam/GPU/gpu_project/build/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/triangulation.dir/triangulation.cpp.o -c /home/polo/work/siam/GPU/gpu_project/src/triangulation.cpp
+	cd /home/polo/work/siam/GPU/gpu_project/build/src && /bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/triangulation.dir/triangulation.cpp.o -c /home/polo/work/siam/GPU/gpu_project/src/triangulation.cpp
 
 src/CMakeFiles/triangulation.dir/triangulation.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/triangulation.dir/triangulation.cpp.i"
-	cd /home/polo/work/siam/GPU/gpu_project/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/polo/work/siam/GPU/gpu_project/src/triangulation.cpp > CMakeFiles/triangulation.dir/triangulation.cpp.i
+	cd /home/polo/work/siam/GPU/gpu_project/build/src && /bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/polo/work/siam/GPU/gpu_project/src/triangulation.cpp > CMakeFiles/triangulation.dir/triangulation.cpp.i
 
 src/CMakeFiles/triangulation.dir/triangulation.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/triangulation.dir/triangulation.cpp.s"
-	cd /home/polo/work/siam/GPU/gpu_project/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/polo/work/siam/GPU/gpu_project/src/triangulation.cpp -o CMakeFiles/triangulation.dir/triangulation.cpp.s
+	cd /home/polo/work/siam/GPU/gpu_project/build/src && /bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/polo/work/siam/GPU/gpu_project/src/triangulation.cpp -o CMakeFiles/triangulation.dir/triangulation.cpp.s
 
 # Object files for target triangulation
 triangulation_OBJECTS = \
