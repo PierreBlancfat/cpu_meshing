@@ -1,7 +1,7 @@
 #ifndef POINT_HPP
 #define POINT_HPP
 
-
+#include <vector>
 
 struct Point {
 	int index;
@@ -57,4 +57,12 @@ struct Triangle {
 	}
 };
 
+
+struct Partition{
+
+	std::vector<Point> partition;
+	std::vector<Edge> path;
+	Partition(std::vector<Point> partition, std::vector<Edge> path ):partition(partition), path(path){};
+	
+};
 #endif

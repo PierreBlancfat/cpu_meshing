@@ -27,13 +27,15 @@ class Meshing{
         
         //  *** triangulation ***
         int triangulation(int nb_partition);
-        std::vector<Point> partition_path(std::vector<Point> &list_points);
-        std::vector<Point> partition(std::vector<Point> list_points, std::vector<Point> &H1, std::vector<Point> &H2);
+        int triangulation_rec(int nb_partition);
+        std::vector<Point> partition_path(std::vector<Point> list_points, bool vertical);
+        std::vector<Point> partition(std::vector<Point> list_points, std::vector<Point> &H1, std::vector<Point> &H2, bool vertical);
+        void partitionRec(std::vector<Point> points_set, std::vector<Point> Edges, bool vertival, int deph_rec, std::vector<Partition> &partitions);
         void ParDeTri(std::vector<Point> points_set, std::vector<Edge> edge_list, std::vector<Triangle> &triangle_list);
         int nearest_point_gpu(std::vector<Point> &ps, Edge &e);
         int nearest_point(std::vector<Point> &ps, Edge &e);
         int convex_hull(Eigen::MatrixXd points);
-        int side(Point p, std::vector<Point> &path);
+        int side(Point p, std::vector<Point> &path, bool vertical);
         bool is_goodtriangle(std::vector<Point> &LIST, Point &ps, Edge &e);
 
         // *** Graphic ***
