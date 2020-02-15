@@ -9,6 +9,5 @@ int main(int argc, char **argv){
     Meshing mesh = Meshing(800, 800, &window);
     mesh.draw_points();
     int fin = mesh.triangulation(1);
-	window.display();
 
 }

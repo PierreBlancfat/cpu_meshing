@@ -8,6 +8,7 @@ src/CMakeFiles/gpu_project.dir/hull.cpp.o: ../src/hull.cpp
 src/CMakeFiles/gpu_project.dir/meshing.cpp.o: ../include/hull.hpp
 src/CMakeFiles/gpu_project.dir/meshing.cpp.o: ../include/meshing.hpp
 src/CMakeFiles/gpu_project.dir/meshing.cpp.o: ../include/point.hpp
+src/CMakeFiles/gpu_project.dir/meshing.cpp.o: ../src/circumcenter.cpp
 src/CMakeFiles/gpu_project.dir/meshing.cpp.o: ../src/hull.cpp
 src/CMakeFiles/gpu_project.dir/meshing.cpp.o: ../src/meshing.cpp
 src/CMakeFiles/gpu_project.dir/meshing.cpp.o: /usr/include/eigen3/Eigen/Cholesky

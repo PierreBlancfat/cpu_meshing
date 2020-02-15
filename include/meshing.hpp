@@ -10,7 +10,7 @@
 #include <vector>
 #include <Eigen/Dense>
 #include <SFML/Graphics.hpp>
-// #include <CL/cl.h>
+#include <CL/cl.h>
 #include <omp.h>
 #include "hull.hpp"
 
@@ -23,17 +23,18 @@ class Meshing{
 
     public: 
 
-        Meshing(int witdh, int height, sf::RenderWindow  *win );
+        Meshing(int witdh, int height, sf::RenderWindow  *win = NULL );
         
         //  *** triangulation ***
         int triangulation(int nb_partition);
         std::vector<Point> partition_path(std::vector<Point> &list_points);
         std::vector<Point> partition(std::vector<Point> list_points, std::vector<Point> &H1, std::vector<Point> &H2);
-        void 
-        ParDeTri(std::vector<Point> points_set, std::vector<Edge> edge_list, std::vector<Triangle> &triangle_list);
+        void ParDeTri(std::vector<Point> points_set, std::vector<Edge> edge_list, std::vector<Triangle> &triangle_list);
+        int nearest_point_gpu(std::vector<Point> &ps, Edge &e);
         int nearest_point(std::vector<Point> &ps, Edge &e);
         int convex_hull(Eigen::MatrixXd points);
         int side(Point p, std::vector<Point> &path);
+        bool is_goodtriangle(std::vector<Point> &LIST, Point &ps, Edge &e);
 
         // *** Graphic ***
         void draw_point(int x, int y, sf::Color= sf::Color::White);
@@ -46,6 +47,7 @@ class Meshing{
 };
 
 float dd(Edge e, Point p);
+float dd2(Edge e, Point p);
 std::vector<Edge> point_vect_to_vect_edge(std::vector<Point> &ps);
 void update(Edge e, std::vector<Edge> &L);
 int points_to_matrix(std::vector<Point> vect_points);
