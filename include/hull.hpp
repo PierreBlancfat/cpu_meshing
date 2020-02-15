@@ -44,9 +44,9 @@ std::vector<Point> monotoneChain(std::vector<Point> v);
 void quickHull(const std::vector<Point>& v, const Point& a, const Point& b, std::vector<Point>& hull) ;
 // QuickHull algorithm. 
 // https://en.wikipedia.org/wiki/QuickHull
-std::vector<Point> quickHull(const std::vector<Point>& v);
+std::vector<Point> quickHull(const std::vector<Point> &v);
 
 std::vector<Point> getPoints() ;
-void print(const std::vector<Point>& v);
+void print(const std::vector<Point> v);
 
 #endif

@@ -172,16 +172,21 @@ void quickHull(const vector<Point>& v, const Point& a, const Point& b,
 
 // QuickHull algorithm. 
 // https://en.wikipedia.org/wiki/QuickHull
-vector<Point> quickHull(const vector<Point>& v) {
+vector<Point> quickHull(const vector<Point> &v) {
 	vector<Point> hull;
 	
 	// Start with the leftmost and rightmost Points.
 	Point a = *min_element(v.begin(), v.end(), isLeftOf);
 	Point b = *max_element(v.begin(), v.end(), isLeftOf);
 
+	cout <<  " a.index" << a.index << endl;
+	cout <<  " b.index" << b.index << endl;
+
+
 	// Split the Points on either side of segment (a, b)
 	vector<Point> left, right;
 	for (auto p : v) {
+		cout << p.index << endl;
 		ccw(a, b, p) > 0 ? left.push_back(p) : right.push_back(p);
 	}
 	
@@ -198,6 +203,9 @@ vector<Point> quickHull(const vector<Point>& v) {
 	// Add hull Points from the right (bottom)
 	quickHull(right, b, a, hull);
 
+	for( int i= 0; i < hull.size(); i++){
+		cout << "hull " << hull[i].index << endl;
+	}
 	return hull;
 }
 

@@ -85,7 +85,7 @@ void Meshing::partitionRec(vector<Point> points_set, vector<Point> Edges, bool v
     if( deph_rec > 1){
         vector<Point> H1, H2, path;
         path = partition(points_set, H1, H2, vertical);
-        // partitionRec(H1, path, !vertical, deph_rec-1, partitions);
+        partitionRec(H1, path, !vertical, deph_rec-1, partitions);
         partitionRec(H2, path, !vertical, deph_rec-1, partitions);
     }
     else{
@@ -104,6 +104,7 @@ std::vector<Point> Meshing::partition(std::vector<Point> list_points, vector<Poi
     vector<Point> path;
     path = partition_path(list_points, vertical);
     int s;
+    cout << " ********** partition ******" << endl;
     // fill partitions
     for(int i = 0; i < list_points.size(); i++){
         if ( ! std::count(path.begin(), path.end(), list_points[i])){
@@ -121,10 +122,81 @@ std::vector<Point> Meshing::partition(std::vector<Point> list_points, vector<Poi
         }
     }
     for(int i = 0; i< path.size(); i++){
+        cout <<  path[i].index << " " << path[i].x << " " << path[i].y << endl;
         H1.push_back(path[i]);
         H2.push_back(path[i]);
         draw_point(path[i].x, path[i].y, sf::Color::Yellow);
     }
+    return path;
+}
+
+
+
+//TODO choose between x or y median
+vector<Point> Meshing::partition_path(std::vector<Point> list_points, bool vertical){
+    // copy vector
+    vector<Point> proj;
+
+    // find median
+    cout << " ********** partition path ******" << endl;
+
+    std::vector<float> xcoord;
+    for (int i=0; i<list_points.size(); i++){
+        if(vertical){
+            xcoord.push_back(list_points[i].x);
+        }
+        else{
+            xcoord.push_back(list_points[i].y);
+        }
+     }
+    int n = sizeof(xcoord)/sizeof(xcoord[0]); 
+    sort(xcoord.begin(),  xcoord.end());
+    float median  = xcoord[xcoord.size()/2];
+
+    
+    //3d projection
+    vector<Point> hull;
+    for(int i = 0; i < list_points.size(); i++){
+        if(vertical)
+        {
+            proj.push_back(Point(list_points[i].y,pow(list_points[i].x-median, 2) + pow(list_points[i].y,2), list_points[i].index));
+        }
+        else
+        {
+            proj.push_back(Point(list_points[i].x,pow(list_points[i].y-median, 2) + pow(list_points[i].x,2), list_points[i].index));
+        }
+    }
+    // delauney path :
+    hull = quickHull(proj);
+
+    vector<Point> path;
+    int index, index2;
+    for (int i = 0; i < hull.size()-1; i++ ){
+        index = hull[i].index;
+        index2 = hull[i+1].index;
+        cout << index << " " << index2 << endl;
+        if(points[index].y > points[index2].y && vertical == true ){
+            draw_line(points[index].x, points[index].y, points[index2].x, points[index2].y, sf::Color::Red);
+            path.push_back(points[index]);
+        }
+        if(points[index].x  >points[index2].x && vertical == false ){
+            draw_line(points[index].x, points[index].y, points[index2].x, points[index2].y, sf::Color::Magenta);
+            path.push_back(points[index]);
+        }
+    }
+
+    index = hull[hull.size()-1].index;
+    index2 = hull[0].index;
+    if(points[index].y > points[index2].y && vertical == true){
+        draw_line(points[index].x, points[index].y, points[index2].x, points[index2].y, sf::Color::Red);
+        path.push_back(points[index]);
+    }
+    if(points[index].x  > points[index2].x && vertical == false ){
+        draw_line(points[index].x, points[index].y, points[index2].x, points[index2].y, sf::Color::Magenta);
+        path.push_back(points[index]);
+    }        
+    
+    path.push_back(points[index2]);
     return path;
 }
 
@@ -206,69 +278,6 @@ int Meshing::side(Point p, vector<Point> &path, bool vertical){
 }
 
 
-
-//TODO choose between x or y median
-vector<Point> Meshing::partition_path(std::vector<Point> list_points, bool vertical){
-    // copy vector
-    vector<Point> proj;
-
-    // find median
-
-    std::vector<float> xcoord;
-    for (int i=0; i<list_points.size(); i++){
-        if(vertical){
-            xcoord.push_back(list_points[i].x);
-        }
-        else{
-            xcoord.push_back(list_points[i].y);
-        }
-     }
-    int n = sizeof(xcoord)/sizeof(xcoord[0]); 
-    sort(xcoord.begin(),  xcoord.end());
-    float median  = xcoord[xcoord.size()/2];
-
-    
-    //3d projection
-    vector<Point> hull;
-    for(int i = 0; i < list_points.size(); i++){
-        if(vertical){
-            proj.push_back(Point(list_points[i].y,pow(list_points[i].x-median, 2) + pow(list_points[i].y,2), list_points[i].index));
-        }
-        else{
-            proj.push_back(Point(list_points[i].x,pow(list_points[i].y-median, 2) + pow(list_points[i].x,2), list_points[i].index));
-        }
-    }
-    // delauney path :
-    hull = quickHull(proj);
-    vector<Point> path;
-    int index, index2;
-    for (int i = 0; i < hull.size()-1; i++ ){
-        index = hull[i].index;
-        index2 = hull[i+1].index;
-        if(list_points[index].y > list_points[index2].y && vertical == true ){
-            draw_line(list_points[index].x, list_points[index].y, list_points[index2].x, list_points[index2].y, sf::Color::Red);
-            path.push_back(list_points[index]);
-        }
-        if(list_points[index].x  >list_points[index2].x && vertical == false ){
-            draw_line(list_points[index].x, list_points[index].y, list_points[index2].x, list_points[index2].y, sf::Color::Magenta);
-            path.push_back(list_points[index]);
-        }
-    }
-
-    index = hull[hull.size()-1].index;
-    index2 = hull[0].index;
-    if(list_points[index].y > list_points[index2].y && vertical == true){
-        draw_line(list_points[index].x, list_points[index].y, list_points[index2].x, list_points[index2].y, sf::Color::Red);
-        path.push_back(list_points[index]);
-    }
-    if(list_points[index].x  > list_points[index2].x && vertical == false ){
-        draw_line(list_points[index].x, list_points[index].y, list_points[index2].x, list_points[index2].y, sf::Color::Magenta);
-        path.push_back(list_points[index]);
-    }        
-    
-    path.push_back(list_points[index2]);
-    return path;
-}
 
 
 int Meshing::nearest_point_gpu(vector<Point> &ps, Edge &e){
