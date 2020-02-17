@@ -48,10 +48,10 @@ RM = /usr/bin/cmake3 -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /user/0/.base/blancfap/home/work/gpu_meshing
+CMAKE_SOURCE_DIR = /user/0/blancfap/work/gpu_meshing
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /user/0/.base/blancfap/home/work/gpu_meshing/build
+CMAKE_BINARY_DIR = /user/0/blancfap/work/gpu_meshing/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -80,14 +80,14 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	cd /user/0/.base/blancfap/home/work/gpu_meshing/build && $(CMAKE_COMMAND) -E cmake_progress_start /user/0/.base/blancfap/home/work/gpu_meshing/build/CMakeFiles /user/0/.base/blancfap/home/work/gpu_meshing/build/src/CMakeFiles/progress.marks
-	cd /user/0/.base/blancfap/home/work/gpu_meshing/build && $(MAKE) -f CMakeFiles/Makefile2 src/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /user/0/.base/blancfap/home/work/gpu_meshing/build/CMakeFiles 0
+	cd /user/0/blancfap/work/gpu_meshing/build && $(CMAKE_COMMAND) -E cmake_progress_start /user/0/blancfap/work/gpu_meshing/build/CMakeFiles /user/0/blancfap/work/gpu_meshing/build/src/CMakeFiles/progress.marks
+	cd /user/0/blancfap/work/gpu_meshing/build && $(MAKE) -f CMakeFiles/Makefile2 src/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /user/0/blancfap/work/gpu_meshing/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /user/0/.base/blancfap/home/work/gpu_meshing/build && $(MAKE) -f CMakeFiles/Makefile2 src/clean
+	cd /user/0/blancfap/work/gpu_meshing/build && $(MAKE) -f CMakeFiles/Makefile2 src/clean
 .PHONY : clean
 
 # The main clean target
@@ -97,22 +97,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /user/0/.base/blancfap/home/work/gpu_meshing/build && $(MAKE) -f CMakeFiles/Makefile2 src/preinstall
+	cd /user/0/blancfap/work/gpu_meshing/build && $(MAKE) -f CMakeFiles/Makefile2 src/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /user/0/.base/blancfap/home/work/gpu_meshing/build && $(MAKE) -f CMakeFiles/Makefile2 src/preinstall
+	cd /user/0/blancfap/work/gpu_meshing/build && $(MAKE) -f CMakeFiles/Makefile2 src/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /user/0/.base/blancfap/home/work/gpu_meshing/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /user/0/blancfap/work/gpu_meshing/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 src/CMakeFiles/performance.dir/rule:
-	cd /user/0/.base/blancfap/home/work/gpu_meshing/build && $(MAKE) -f CMakeFiles/Makefile2 src/CMakeFiles/performance.dir/rule
+	cd /user/0/blancfap/work/gpu_meshing/build && $(MAKE) -f CMakeFiles/Makefile2 src/CMakeFiles/performance.dir/rule
 .PHONY : src/CMakeFiles/performance.dir/rule
 
 # Convenience name for target.
@@ -122,12 +122,12 @@ performance: src/CMakeFiles/performance.dir/rule
 
 # fast build rule for target.
 performance/fast:
-	cd /user/0/.base/blancfap/home/work/gpu_meshing/build && $(MAKE) -f src/CMakeFiles/performance.dir/build.make src/CMakeFiles/performance.dir/build
+	cd /user/0/blancfap/work/gpu_meshing/build && $(MAKE) -f src/CMakeFiles/performance.dir/build.make src/CMakeFiles/performance.dir/build
 .PHONY : performance/fast
 
 # Convenience name for target.
 src/CMakeFiles/triangulation.dir/rule:
-	cd /user/0/.base/blancfap/home/work/gpu_meshing/build && $(MAKE) -f CMakeFiles/Makefile2 src/CMakeFiles/triangulation.dir/rule
+	cd /user/0/blancfap/work/gpu_meshing/build && $(MAKE) -f CMakeFiles/Makefile2 src/CMakeFiles/triangulation.dir/rule
 .PHONY : src/CMakeFiles/triangulation.dir/rule
 
 # Convenience name for target.
@@ -137,12 +137,12 @@ triangulation: src/CMakeFiles/triangulation.dir/rule
 
 # fast build rule for target.
 triangulation/fast:
-	cd /user/0/.base/blancfap/home/work/gpu_meshing/build && $(MAKE) -f src/CMakeFiles/triangulation.dir/build.make src/CMakeFiles/triangulation.dir/build
+	cd /user/0/blancfap/work/gpu_meshing/build && $(MAKE) -f src/CMakeFiles/triangulation.dir/build.make src/CMakeFiles/triangulation.dir/build
 .PHONY : triangulation/fast
 
 # Convenience name for target.
 src/CMakeFiles/gpu_project.dir/rule:
-	cd /user/0/.base/blancfap/home/work/gpu_meshing/build && $(MAKE) -f CMakeFiles/Makefile2 src/CMakeFiles/gpu_project.dir/rule
+	cd /user/0/blancfap/work/gpu_meshing/build && $(MAKE) -f CMakeFiles/Makefile2 src/CMakeFiles/gpu_project.dir/rule
 .PHONY : src/CMakeFiles/gpu_project.dir/rule
 
 # Convenience name for target.
@@ -152,7 +152,7 @@ gpu_project: src/CMakeFiles/gpu_project.dir/rule
 
 # fast build rule for target.
 gpu_project/fast:
-	cd /user/0/.base/blancfap/home/work/gpu_meshing/build && $(MAKE) -f src/CMakeFiles/gpu_project.dir/build.make src/CMakeFiles/gpu_project.dir/build
+	cd /user/0/blancfap/work/gpu_meshing/build && $(MAKE) -f src/CMakeFiles/gpu_project.dir/build.make src/CMakeFiles/gpu_project.dir/build
 .PHONY : gpu_project/fast
 
 hull.o: hull.cpp.o
@@ -161,7 +161,7 @@ hull.o: hull.cpp.o
 
 # target to build an object file
 hull.cpp.o:
-	cd /user/0/.base/blancfap/home/work/gpu_meshing/build && $(MAKE) -f src/CMakeFiles/gpu_project.dir/build.make src/CMakeFiles/gpu_project.dir/hull.cpp.o
+	cd /user/0/blancfap/work/gpu_meshing/build && $(MAKE) -f src/CMakeFiles/gpu_project.dir/build.make src/CMakeFiles/gpu_project.dir/hull.cpp.o
 .PHONY : hull.cpp.o
 
 hull.i: hull.cpp.i
@@ -170,7 +170,7 @@ hull.i: hull.cpp.i
 
 # target to preprocess a source file
 hull.cpp.i:
-	cd /user/0/.base/blancfap/home/work/gpu_meshing/build && $(MAKE) -f src/CMakeFiles/gpu_project.dir/build.make src/CMakeFiles/gpu_project.dir/hull.cpp.i
+	cd /user/0/blancfap/work/gpu_meshing/build && $(MAKE) -f src/CMakeFiles/gpu_project.dir/build.make src/CMakeFiles/gpu_project.dir/hull.cpp.i
 .PHONY : hull.cpp.i
 
 hull.s: hull.cpp.s
@@ -179,7 +179,7 @@ hull.s: hull.cpp.s
 
 # target to generate assembly for a file
 hull.cpp.s:
-	cd /user/0/.base/blancfap/home/work/gpu_meshing/build && $(MAKE) -f src/CMakeFiles/gpu_project.dir/build.make src/CMakeFiles/gpu_project.dir/hull.cpp.s
+	cd /user/0/blancfap/work/gpu_meshing/build && $(MAKE) -f src/CMakeFiles/gpu_project.dir/build.make src/CMakeFiles/gpu_project.dir/hull.cpp.s
 .PHONY : hull.cpp.s
 
 meshing.o: meshing.cpp.o
@@ -188,7 +188,7 @@ meshing.o: meshing.cpp.o
 
 # target to build an object file
 meshing.cpp.o:
-	cd /user/0/.base/blancfap/home/work/gpu_meshing/build && $(MAKE) -f src/CMakeFiles/gpu_project.dir/build.make src/CMakeFiles/gpu_project.dir/meshing.cpp.o
+	cd /user/0/blancfap/work/gpu_meshing/build && $(MAKE) -f src/CMakeFiles/gpu_project.dir/build.make src/CMakeFiles/gpu_project.dir/meshing.cpp.o
 .PHONY : meshing.cpp.o
 
 meshing.i: meshing.cpp.i
@@ -197,7 +197,7 @@ meshing.i: meshing.cpp.i
 
 # target to preprocess a source file
 meshing.cpp.i:
-	cd /user/0/.base/blancfap/home/work/gpu_meshing/build && $(MAKE) -f src/CMakeFiles/gpu_project.dir/build.make src/CMakeFiles/gpu_project.dir/meshing.cpp.i
+	cd /user/0/blancfap/work/gpu_meshing/build && $(MAKE) -f src/CMakeFiles/gpu_project.dir/build.make src/CMakeFiles/gpu_project.dir/meshing.cpp.i
 .PHONY : meshing.cpp.i
 
 meshing.s: meshing.cpp.s
@@ -206,7 +206,7 @@ meshing.s: meshing.cpp.s
 
 # target to generate assembly for a file
 meshing.cpp.s:
-	cd /user/0/.base/blancfap/home/work/gpu_meshing/build && $(MAKE) -f src/CMakeFiles/gpu_project.dir/build.make src/CMakeFiles/gpu_project.dir/meshing.cpp.s
+	cd /user/0/blancfap/work/gpu_meshing/build && $(MAKE) -f src/CMakeFiles/gpu_project.dir/build.make src/CMakeFiles/gpu_project.dir/meshing.cpp.s
 .PHONY : meshing.cpp.s
 
 performance.o: performance.cpp.o
@@ -215,8 +215,8 @@ performance.o: performance.cpp.o
 
 # target to build an object file
 performance.cpp.o:
-	cd /user/0/.base/blancfap/home/work/gpu_meshing/build && $(MAKE) -f src/CMakeFiles/performance.dir/build.make src/CMakeFiles/performance.dir/performance.cpp.o
-	cd /user/0/.base/blancfap/home/work/gpu_meshing/build && $(MAKE) -f src/CMakeFiles/gpu_project.dir/build.make src/CMakeFiles/gpu_project.dir/performance.cpp.o
+	cd /user/0/blancfap/work/gpu_meshing/build && $(MAKE) -f src/CMakeFiles/performance.dir/build.make src/CMakeFiles/performance.dir/performance.cpp.o
+	cd /user/0/blancfap/work/gpu_meshing/build && $(MAKE) -f src/CMakeFiles/gpu_project.dir/build.make src/CMakeFiles/gpu_project.dir/performance.cpp.o
 .PHONY : performance.cpp.o
 
 performance.i: performance.cpp.i
@@ -225,8 +225,8 @@ performance.i: performance.cpp.i
 
 # target to preprocess a source file
 performance.cpp.i:
-	cd /user/0/.base/blancfap/home/work/gpu_meshing/build && $(MAKE) -f src/CMakeFiles/performance.dir/build.make src/CMakeFiles/performance.dir/performance.cpp.i
-	cd /user/0/.base/blancfap/home/work/gpu_meshing/build && $(MAKE) -f src/CMakeFiles/gpu_project.dir/build.make src/CMakeFiles/gpu_project.dir/performance.cpp.i
+	cd /user/0/blancfap/work/gpu_meshing/build && $(MAKE) -f src/CMakeFiles/performance.dir/build.make src/CMakeFiles/performance.dir/performance.cpp.i
+	cd /user/0/blancfap/work/gpu_meshing/build && $(MAKE) -f src/CMakeFiles/gpu_project.dir/build.make src/CMakeFiles/gpu_project.dir/performance.cpp.i
 .PHONY : performance.cpp.i
 
 performance.s: performance.cpp.s
@@ -235,8 +235,8 @@ performance.s: performance.cpp.s
 
 # target to generate assembly for a file
 performance.cpp.s:
-	cd /user/0/.base/blancfap/home/work/gpu_meshing/build && $(MAKE) -f src/CMakeFiles/performance.dir/build.make src/CMakeFiles/performance.dir/performance.cpp.s
-	cd /user/0/.base/blancfap/home/work/gpu_meshing/build && $(MAKE) -f src/CMakeFiles/gpu_project.dir/build.make src/CMakeFiles/gpu_project.dir/performance.cpp.s
+	cd /user/0/blancfap/work/gpu_meshing/build && $(MAKE) -f src/CMakeFiles/performance.dir/build.make src/CMakeFiles/performance.dir/performance.cpp.s
+	cd /user/0/blancfap/work/gpu_meshing/build && $(MAKE) -f src/CMakeFiles/gpu_project.dir/build.make src/CMakeFiles/gpu_project.dir/performance.cpp.s
 .PHONY : performance.cpp.s
 
 triangulation.o: triangulation.cpp.o
@@ -245,8 +245,8 @@ triangulation.o: triangulation.cpp.o
 
 # target to build an object file
 triangulation.cpp.o:
-	cd /user/0/.base/blancfap/home/work/gpu_meshing/build && $(MAKE) -f src/CMakeFiles/triangulation.dir/build.make src/CMakeFiles/triangulation.dir/triangulation.cpp.o
-	cd /user/0/.base/blancfap/home/work/gpu_meshing/build && $(MAKE) -f src/CMakeFiles/gpu_project.dir/build.make src/CMakeFiles/gpu_project.dir/triangulation.cpp.o
+	cd /user/0/blancfap/work/gpu_meshing/build && $(MAKE) -f src/CMakeFiles/triangulation.dir/build.make src/CMakeFiles/triangulation.dir/triangulation.cpp.o
+	cd /user/0/blancfap/work/gpu_meshing/build && $(MAKE) -f src/CMakeFiles/gpu_project.dir/build.make src/CMakeFiles/gpu_project.dir/triangulation.cpp.o
 .PHONY : triangulation.cpp.o
 
 triangulation.i: triangulation.cpp.i
@@ -255,8 +255,8 @@ triangulation.i: triangulation.cpp.i
 
 # target to preprocess a source file
 triangulation.cpp.i:
-	cd /user/0/.base/blancfap/home/work/gpu_meshing/build && $(MAKE) -f src/CMakeFiles/triangulation.dir/build.make src/CMakeFiles/triangulation.dir/triangulation.cpp.i
-	cd /user/0/.base/blancfap/home/work/gpu_meshing/build && $(MAKE) -f src/CMakeFiles/gpu_project.dir/build.make src/CMakeFiles/gpu_project.dir/triangulation.cpp.i
+	cd /user/0/blancfap/work/gpu_meshing/build && $(MAKE) -f src/CMakeFiles/triangulation.dir/build.make src/CMakeFiles/triangulation.dir/triangulation.cpp.i
+	cd /user/0/blancfap/work/gpu_meshing/build && $(MAKE) -f src/CMakeFiles/gpu_project.dir/build.make src/CMakeFiles/gpu_project.dir/triangulation.cpp.i
 .PHONY : triangulation.cpp.i
 
 triangulation.s: triangulation.cpp.s
@@ -265,8 +265,8 @@ triangulation.s: triangulation.cpp.s
 
 # target to generate assembly for a file
 triangulation.cpp.s:
-	cd /user/0/.base/blancfap/home/work/gpu_meshing/build && $(MAKE) -f src/CMakeFiles/triangulation.dir/build.make src/CMakeFiles/triangulation.dir/triangulation.cpp.s
-	cd /user/0/.base/blancfap/home/work/gpu_meshing/build && $(MAKE) -f src/CMakeFiles/gpu_project.dir/build.make src/CMakeFiles/gpu_project.dir/triangulation.cpp.s
+	cd /user/0/blancfap/work/gpu_meshing/build && $(MAKE) -f src/CMakeFiles/triangulation.dir/build.make src/CMakeFiles/triangulation.dir/triangulation.cpp.s
+	cd /user/0/blancfap/work/gpu_meshing/build && $(MAKE) -f src/CMakeFiles/gpu_project.dir/build.make src/CMakeFiles/gpu_project.dir/triangulation.cpp.s
 .PHONY : triangulation.cpp.s
 
 # Help Target
@@ -303,6 +303,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /user/0/.base/blancfap/home/work/gpu_meshing/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /user/0/blancfap/work/gpu_meshing/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

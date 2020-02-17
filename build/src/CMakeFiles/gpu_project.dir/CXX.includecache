@@ -810,41 +810,41 @@ string
 cstdlib
 -
 
-/user/0/.base/blancfap/home/work/gpu_meshing/src/circumcenter.cpp
+/user/0/blancfap/work/gpu_meshing/src/circumcenter.cpp
 iostream
 -
 cfloat
 -
 point.hpp
-/user/0/.base/blancfap/home/work/gpu_meshing/src/point.hpp
+/user/0/blancfap/work/gpu_meshing/src/point.hpp
 
-/user/0/.base/blancfap/home/work/gpu_meshing/src/hull.cpp
+/user/0/blancfap/work/gpu_meshing/src/hull.cpp
 hull.hpp
-/user/0/.base/blancfap/home/work/gpu_meshing/src/hull.hpp
+/user/0/blancfap/work/gpu_meshing/src/hull.hpp
 
-/user/0/.base/blancfap/home/work/gpu_meshing/src/meshing.cpp
+/user/0/blancfap/work/gpu_meshing/src/meshing.cpp
 meshing.hpp
-/user/0/.base/blancfap/home/work/gpu_meshing/src/meshing.hpp
+/user/0/blancfap/work/gpu_meshing/src/meshing.hpp
 hull.cpp
-/user/0/.base/blancfap/home/work/gpu_meshing/src/hull.cpp
+/user/0/blancfap/work/gpu_meshing/src/hull.cpp
 circumcenter.cpp
-/user/0/.base/blancfap/home/work/gpu_meshing/src/circumcenter.cpp
+/user/0/blancfap/work/gpu_meshing/src/circumcenter.cpp
 cl.hpp
-/user/0/.base/blancfap/home/work/gpu_meshing/src/cl.hpp
+/user/0/blancfap/work/gpu_meshing/src/cl.hpp
 util.hpp
-/user/0/.base/blancfap/home/work/gpu_meshing/src/util.hpp
+/user/0/blancfap/work/gpu_meshing/src/util.hpp
 device_picker.hpp
-/user/0/.base/blancfap/home/work/gpu_meshing/src/device_picker.hpp
+/user/0/blancfap/work/gpu_meshing/src/device_picker.hpp
 
-/user/0/.base/blancfap/home/work/gpu_meshing/src/performance.cpp
+/user/0/blancfap/work/gpu_meshing/src/performance.cpp
 meshing.hpp
 -
 
-/user/0/.base/blancfap/home/work/gpu_meshing/src/triangulation.cpp
+/user/0/blancfap/work/gpu_meshing/src/triangulation.cpp
 meshing.hpp
 -
 
-/user/0/.base/blancfap/home/work/gpu_meshing/src/util.hpp
+/user/0/blancfap/work/gpu_meshing/src/util.hpp
 sys/time.h
 -
 stdint.h

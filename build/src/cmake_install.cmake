@@ -1,4 +1,4 @@
-# Install script for directory: /user/0/.base/blancfap/home/work/gpu_meshing/src
+# Install script for directory: /user/0/blancfap/work/gpu_meshing/src
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

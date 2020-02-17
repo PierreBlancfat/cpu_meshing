@@ -177,7 +177,6 @@ vector<Point> Meshing::partition_path(std::vector<Point> list_points, bool verti
         index = hull[i].index;
         index2 = hull[i+1].index;
         not_in_path =  true;
-
         if( !old_path.empty()){
             not_in_path =  not_in_vect(old_path, points[index]);
         }
@@ -402,13 +401,13 @@ int Meshing::nearest_point_gpu(vector<Point> &ps, Edge &e){
     cl::Context context(chosen_device);
 
     cout << "pas chaud ananas" << endl;
-    cl::Program program(context, util::loadProgram("vadd.cl"), true);
+    cl::Program program(context, util::loadProgram("dists_kernel.cl"), true);
 
     cl::CommandQueue queue(context);
 
     // kernel
-    // auto vadd = cl::make_kernel<cl::Buffer, cl::Buffer, cl::Buffer, float,  float,  float,  float, int>(program, "vadd");
-    auto vadd = cl::make_kernel<cl::Buffer, cl::Buffer, cl::Buffer, int>(program, "vadd");
+    // auto dists_kernel = cl::make_kernel<cl::Buffer, cl::Buffer, cl::Buffer, float,  float,  float,  float, int>(program, "dists_kernel");
+    auto dists_kernel = cl::make_kernel<cl::Buffer, cl::Buffer, cl::Buffer, int>(program, "dists_kernel");
 
     cout << "chaud ananas *" << endl;
 
@@ -418,7 +417,7 @@ int Meshing::nearest_point_gpu(vector<Point> &ps, Edge &e){
     d_dists = cl::Buffer(context,  dists.begin(),  dists.end(), true);
 
 
-    vadd(
+    dists_kernel(
             cl::EnqueueArgs(
                 queue,
                 cl::NDRange(count)),

@@ -6,5 +6,5 @@ CXX_FLAGS =  -fopenmp   -fopenmp
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/usr/include/eigen3 -I/user/0/.base/blancfap/home/work/gpu_meshing/SFML-master/include -I/user/0/.base/blancfap/home/work/gpu_meshing/utils -I/user/0/.base/blancfap/home/work/gpu_meshing/PUBLIC -I/user/0/.base/blancfap/home/work/gpu_meshing/Common -I/user/0/.base/blancfap/home/work/gpu_meshing/include 
+CXX_INCLUDES = -I/usr/include/eigen3 -I/user/0/blancfap/work/gpu_meshing/SFML-master/include -I/user/0/blancfap/work/gpu_meshing/utils -I/user/0/blancfap/work/gpu_meshing/PUBLIC -I/user/0/blancfap/work/gpu_meshing/Common -I/user/0/blancfap/work/gpu_meshing/include 
 

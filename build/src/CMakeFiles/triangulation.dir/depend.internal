@@ -82,7 +82,7 @@ src/CMakeFiles/triangulation.dir/triangulation.cpp.o
  ../include/meshing.hpp
  ../include/point.hpp
  ../include/util.hpp
- /user/0/.base/blancfap/home/work/gpu_meshing/src/triangulation.cpp
+ /user/0/blancfap/work/gpu_meshing/src/triangulation.cpp
  /usr/include/eigen3/Eigen/Cholesky
  /usr/include/eigen3/Eigen/Core
  /usr/include/eigen3/Eigen/Dense
