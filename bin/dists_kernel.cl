@@ -15,6 +15,10 @@ __kernel void dists_kernel(
     __global float* a,
     __global float* b,
     __global float* dists,
+    __global float* e1x,
+    __global float* e1y,
+    __global float* e2x,
+    __global float* e2y,
     const unsigned int count)
 {
   int i = get_global_id(0);

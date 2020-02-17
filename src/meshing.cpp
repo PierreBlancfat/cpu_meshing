@@ -369,6 +369,10 @@ int Meshing::nearest_point_gpu(vector<Point> &ps, Edge &e){
     cl::Buffer d_px;
     cl::Buffer d_py;
     cl::Buffer d_dists;
+    cl::Buffer onex;
+    cl::Buffer oney;
+    cl::Buffer twox;
+    cl::Buffer twoy;
 
     for( int i = 0; i < count; i++){
         px.push_back(ps[i].x);
@@ -406,8 +410,8 @@ int Meshing::nearest_point_gpu(vector<Point> &ps, Edge &e){
     cl::CommandQueue queue(context);
 
     // kernel
-    // auto dists_kernel = cl::make_kernel<cl::Buffer, cl::Buffer, cl::Buffer, float,  float,  float,  float, int>(program, "dists_kernel");
-    auto dists_kernel = cl::make_kernel<cl::Buffer, cl::Buffer, cl::Buffer, int>(program, "dists_kernel");
+    auto dists_kernel = cl::make_kernel<cl::Buffer, cl::Buffer, cl::Buffer, cl::Buffer,  cl::Buffer,  cl::Buffer,  cl::Buffer, int>(program, "dists_kernel");
+    // auto dists_kernel = cl::make_kernel<cl::Buffer, cl::Buffer, cl::Buffer, int>(program, "dists_kernel");
 
     cout << "chaud ananas *" << endl;
 
@@ -415,6 +419,11 @@ int Meshing::nearest_point_gpu(vector<Point> &ps, Edge &e){
     d_px = cl::Buffer(context, px.begin(), px.end(), true);
     d_py = cl::Buffer(context, px.begin(), px.end(), true);
     d_dists = cl::Buffer(context,  dists.begin(),  dists.end(), true);
+    onex = cl::Buffer(context,  e.one.x, true);
+    oney = cl::Buffer(context,  e.one.y, true);
+    twox = cl::Buffer(context,  e.two.x, true);
+    twoy = cl::Buffer(context,  e.two.y, true);
+
 
 
     dists_kernel(
@@ -424,11 +433,11 @@ int Meshing::nearest_point_gpu(vector<Point> &ps, Edge &e){
             d_px,
             d_py,
             d_dists,
+            onex,
+            oney,
+            twox,
+            twoy,
             count);
-            // e.one.x,
-            // e.one.y,
-            // e.two.x,
-            // e.two.y,
 
     queue.finish();
 

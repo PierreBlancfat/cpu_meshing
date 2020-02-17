@@ -794,22 +794,6 @@ hull.hpp
 vector
 -
 
-../include/util.hpp
-sys/time.h
--
-stdint.h
--
-unistd.h
--
-iostream
--
-fstream
--
-string
--
-cstdlib
--
-
 /user/0/blancfap/work/gpu_meshing/src/circumcenter.cpp
 iostream
 -
@@ -835,14 +819,6 @@ util.hpp
 /user/0/blancfap/work/gpu_meshing/src/util.hpp
 device_picker.hpp
 /user/0/blancfap/work/gpu_meshing/src/device_picker.hpp
-
-/user/0/blancfap/work/gpu_meshing/src/performance.cpp
-meshing.hpp
--
-
-/user/0/blancfap/work/gpu_meshing/src/triangulation.cpp
-meshing.hpp
--
 
 /user/0/blancfap/work/gpu_meshing/src/util.hpp
 sys/time.h
