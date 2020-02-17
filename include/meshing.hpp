@@ -33,7 +33,7 @@ class Meshing{
         std::vector<Point> partition_path(std::vector<Point> list_points, bool vertical, std::vector<Point> old_path =  DEFAULT_VECTOR);
         void partitionRec(std::vector<Point> points_set, std::vector<Point> Edges, bool vertival, int deph_rec, std::vector<Partition> &partitions);
         void ParDeTri(std::vector<Point> points_set, std::vector<Edge> edge_list, std::vector<Triangle> &triangle_list);
-        int nearest_point_gpu(std::vector<Point> &ps, Edge &e);
+        int nearest_point_cpu(std::vector<Point> ps, Edge &e);
         int nearest_point(std::vector<Point> &ps, Edge &e);
         int convex_hull(Eigen::MatrixXd points);
         int side(Point p, std::vector<Point> &path, bool vertical);

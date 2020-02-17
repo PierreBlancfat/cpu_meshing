@@ -9,8 +9,10 @@ int main(int argc, char **argv){
     sf::RenderWindow window(sf::VideoMode(800, 800), "Delaunay triangulation");
     Meshing mesh = Meshing(800, 800, &window);
     mesh.draw_points();
-    int fin = mesh.triangulation_rec(2);
 	window.display();
+
+	// return 1;
+    // int fin = mesh.triangulation_rec(1);
 
 	while (window.isOpen())
 	{

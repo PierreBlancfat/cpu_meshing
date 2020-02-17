@@ -23,9 +23,9 @@ using namespace Eigen;
 Meshing::Meshing(int witdh, int height, sf::RenderWindow  *win ){
     window = win;
     window->setFramerateLimit(1);
-    MatrixXd points_eigen = MatrixXd::Random(400,2)*witdh;
+    MatrixXd points_eigen = MatrixXd::Random(200,2)*witdh;
     points_eigen = points_eigen.array().abs();
-    
+
     for(int i = 0; i < points_eigen.rows(); i++){
         points.push_back(Point(points_eigen(i,0), points_eigen(i,1), i));
     }
@@ -47,14 +47,13 @@ int Meshing::triangulation(int nb_partition){
         partitions.push_back(P1);
     }
 
+    return 1;
     for( int i = 0; i < partitions.size(); i++)
     {
         ParDeTri(partitions[i].partition, partitions[i].path, triangle_list);
     }
 
     for( int i = 0; i < triangle_list.size(); i++){
-        // cout << "draw " << i << endl;
-        cout << "draw " << i << endl;
         draw_triangle(triangle_list[i]);
     }
 }
@@ -66,16 +65,15 @@ int Meshing::triangulation_rec(int nb_partition){
     vector<Triangle>  triangle_list;
     partitionRec(points, path, true, nb_partition,partitions);
 
-
-    return 1;
+    // return 1;
+    #pragma omp parallel for
     for( int i = 0; i < partitions.size(); i++)
     {
         ParDeTri(partitions[i].partition, partitions[i].path, triangle_list);
     }
 
+
     for( int i = 0; i < triangle_list.size(); i++){
-        // cout << "draw " << i << endl;
-        cout << "draw " << i << endl;
         draw_triangle(triangle_list[i]);
     }
 }
@@ -111,7 +109,6 @@ std::vector<Point> Meshing::partition(std::vector<Point> list_points, vector<Poi
             if ( s < 0){
                 draw_point(list_points[i].x, list_points[i].y, sf::Color::Green);
                 H1.push_back(list_points[i]);
-
             }   
             if( s >= 0)
             {   
@@ -136,8 +133,6 @@ vector<Point> Meshing::partition_path(std::vector<Point> list_points, bool verti
     vector<Point> proj;
 
     // find median
-    cout << " ********** partition path ******" << endl;
-
     std::vector<float> xcoord;
     for (int i=0; i<list_points.size(); i++){
         if(vertical){
@@ -236,11 +231,6 @@ vector<Point> Meshing::partition_path(std::vector<Point> list_points, bool verti
         if(points[index].x > points[index2].x){
             if(!not_in_path && (points[index].y - tolerance < median && points[index].y + tolerance > median )){
                 draw_line(points[index].x, points[index].y, points[index2].x, points[index2].y, sf::Color::Yellow);
-                cout <<  points[index].x  << " "  << points[index].y << endl;
-                cout <<  points[index2].x  << " "  << points[index2].y << endl;
-                bool test = points[index].x  > points[index2].x ;
-                cout << test << endl;
-
                 path.push_back(points[index]);
             }
             else if (not_in_path){
@@ -260,15 +250,13 @@ void Meshing::ParDeTri(vector<Point> point_set, vector<Edge> edge_list, vector<T
     int max_it = 50;
     while( edge_list.size() > 0 && it < max_it){
         it++;
-        cout << "********* edge_list size : " << edge_list.size() << "*************" << endl;
         // pop first edge
         int i = 0;
         Edge e = Edge(edge_list[i].one, edge_list[i].two);
         edge_list.erase(edge_list.begin()+i);
 
         // make a delaunay triangle
-        index_nearest_point = nearest_point(point_set, e);
-        cout << "nearest point :" << index_nearest_point << endl;
+        index_nearest_point = nearest_point_cpu(point_set, e);
         Triangle t = Triangle(e, point_set[index_nearest_point]);
 
         Edge ep = Edge(e.one, point_set[index_nearest_point]);
@@ -283,7 +271,7 @@ void Meshing::ParDeTri(vector<Point> point_set, vector<Edge> edge_list, vector<T
         else
             cout <<  "not triangle" << endl;
     }
-    cout <<  "finished" << endl;
+    cout <<  "Finished ParDeTri" << endl;
     return;
 }
 
@@ -292,11 +280,9 @@ void update(Edge e, vector<Edge> &edge_list){
     for( int i = 0; i < edge_list.size(); i++){   
         if(e == edge_list[i]){
             edge_list.erase(edge_list.begin()+i);
-            cout << "#### erase " << i << endl;
             return;
         }
     }
-    cout << "#### push back  " << e.one.index <<  endl;
     edge_list.push_back(e);
 }
 
@@ -332,12 +318,39 @@ int Meshing::side(Point p, vector<Point> &path, bool vertical){
 
 
 
-int Meshing::nearest_point_gpu(vector<Point> &ps, Edge &e){
+int Meshing::nearest_point_cpu(vector<Point> ps, Edge &e){
 
-    // cl::Buffer p_x;                        // device memory used for the input  a vector
-    // cl::Buffer p_y;                       // device memory used for the input  b vector          
-    return 1;         
 
+    int len = ps.size();
+    float dists [len];
+
+    #pragma omp parallel for schedule(dynamic)
+    for(int i = 0; i < ps.size(); i++){
+        dists[i] = dd(e, ps[i]);
+    }
+
+    float min = MAXFLOAT;
+    int index_min = -1;
+    #pragma omp parallel
+    {
+        int loc_index = index_min;
+        float loc_min = min;  
+        #pragma omp parallel for reduction(min:loc_min)
+        for( int i = 0; i < len; i++){
+            if( loc_min > dists[i] ){
+                loc_min = dists[i];
+                loc_index  = i;
+            }   
+        }
+        #pragma omp critical 
+        {
+            if (min > loc_min ) {
+                min = loc_min;
+                index_min = loc_index;
+            }
+        }
+    }
+    return index_min;    
 }
 
 int Meshing::nearest_point(vector<Point> &ps, Edge &e){ 
@@ -345,7 +358,7 @@ int Meshing::nearest_point(vector<Point> &ps, Edge &e){
     float dis, min_dis;
     int index_min = -1;
     for( int i = 0; i < ps.size(); i++){
-        dis = dd2(e, ps[i]);
+        dis = dd(e, ps[i]);
         if( min > dis ){
             min = dis;
             index_min  = i;
@@ -442,12 +455,6 @@ float dd(Edge e, Point p){
         return -circumradius;
     }
     return circumradius;
-
-    // obtute ? -circumdius
-    if (bac < 3.1415/2 && abc < 3.1415/2 && bca < 3.1415/2){
-        return circumradius;
-    }
-     return circumradius;
 }
 
 
