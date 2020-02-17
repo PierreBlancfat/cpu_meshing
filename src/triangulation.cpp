@@ -6,13 +6,13 @@ using  namespace std;
 int main(int argc, char **argv){
 
 
-    sf::RenderWindow window(sf::VideoMode(800, 800), "Delaunay triangulation");
-    Meshing mesh = Meshing(800, 800, &window);
-    mesh.draw_points();
-	window.display();
+  sf::RenderWindow window(sf::VideoMode(800, 800), "Delaunay triangulation");
+  Meshing mesh = Meshing(800, 800, &window);
+  mesh.draw_points();
+  window.display();
 
 	// return 1;
-    // int fin = mesh.triangulation_rec(1);
+ int fin = mesh.triangulation_rec(1);
 
 	while (window.isOpen())
 	{
@@ -25,4 +25,3 @@ int main(int argc, char **argv){
 	}
 	return 1;
 }
- 

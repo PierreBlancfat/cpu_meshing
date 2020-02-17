@@ -11,14 +11,8 @@ set(SOURCES
 add_library(${PROJECT_NAME} ${SOURCES})
 
 add_executable(triangulation triangulation.cpp)
-target_link_libraries(triangulation gpu_project sfml-graphics sfml-window sfml-system)
+target_link_libraries(triangulation  gpu_project sfml-graphics sfml-window sfml-system)
+target_link_libraries(triangulation PUBLIC ${OpenCL_LIBRARY})
 
 add_executable(performance performance.cpp)
-target_link_libraries(performance gpu_project sfml-graphics sfml-window sfml-system)
-
-
-
-
-
-# add_executable(DeviceInfo deviceinfo.cpp)
-# target_link_libraries(DeviceInfo PUBLIC ${OpenCL_LIBRARY})
+target_link_libraries(performance ${OpenCL_LIBRARY}  gpu_project sfml-graphics sfml-window sfml-system)

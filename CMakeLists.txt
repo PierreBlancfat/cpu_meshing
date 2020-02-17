@@ -28,22 +28,19 @@ ENDIF()
 #OpenCL
 
 # # Recherche le package OpenCL
-# find_package(OpenCL REQUIRED)
-# if(NOT OPENCL_HAS_CXX)
-#   message(WARNING "C++ bindings not found.  Using Kronos supplied reference OpenCL v1.2 C++ bindings.")
-#   list(APPEND OpenCL_INCLUDE_DIRS Common)
-# endif()
+ find_package(OpenCL REQUIRED)
+ if(NOT OPENCL_HAS_CXX)
+   message(WARNING "C++ bindings not found.  Using Kronos supplied reference OpenCL v1.2 C++ bindings.")
+   list(APPEND OpenCL_INCLUDE_DIRS Common)
+ endif()
 
 
 # # Ajoute les dépendences sur la bibliothèque OPENCL
-# set(LIBS ${LIBS} ${OpenCL_LIBRARY})
-# include_directories(${OpenCL_INCLUDE_DIR})
-# include_directories(SYSTEM ${OPENCL_INCLUDE_DIRS})
-# add_definitions(${OPENCL_CXX_DEFINITIONS})
+ set(LIBS ${LIBS} ${OpenCL_LIBRARY})
+ include_directories(${OpenCL_INCLUDE_DIR})
+ include_directories(SYSTEM ${OPENCL_INCLUDE_DIRS})
+ add_definitions(${OPENCL_CXX_DEFINITIONS})
 
 
 include_directories(include)
 add_subdirectory(src)
-
-
-

@@ -10,8 +10,9 @@
 #include <vector>
 #include <Eigen/Dense>
 #include <SFML/Graphics.hpp>
-#include <CL/cl.h>
 #include <omp.h>
+#include <CL/cl.hpp>
+#include "util.hpp"
 #include "hull.hpp"
 
 static std::vector<Point> DEFAULT_VECTOR;
@@ -20,12 +21,12 @@ class Meshing{
     private:
 
         sf::RenderWindow *window;
-        std::vector<Point> points;    
+        std::vector<Point> points;
 
-    public: 
+    public:
 
         Meshing(int witdh, int height, sf::RenderWindow  *win = NULL );
-        
+
         //  *** triangulation ***
         int triangulation(int nb_partition);
         int triangulation_rec(int nb_partition);
@@ -34,6 +35,7 @@ class Meshing{
         void partitionRec(std::vector<Point> points_set, std::vector<Point> Edges, bool vertival, int deph_rec, std::vector<Partition> &partitions);
         void ParDeTri(std::vector<Point> points_set, std::vector<Edge> edge_list, std::vector<Triangle> &triangle_list);
         int nearest_point_cpu(std::vector<Point> ps, Edge &e);
+        int nearest_point_gpu(std::vector<Point> &ps, Edge &e);
         int nearest_point(std::vector<Point> &ps, Edge &e);
         int convex_hull(Eigen::MatrixXd points);
         int side(Point p, std::vector<Point> &path, bool vertical);

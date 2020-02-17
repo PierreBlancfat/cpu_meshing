@@ -3,6 +3,7 @@
 #include "meshing.hpp"
 #include "hull.cpp"
 #include "circumcenter.cpp"
+#include "device_picker.hpp"
 
 using namespace std;
 using namespace Eigen;
@@ -109,9 +110,9 @@ std::vector<Point> Meshing::partition(std::vector<Point> list_points, vector<Poi
             if ( s < 0){
                 draw_point(list_points[i].x, list_points[i].y, sf::Color::Green);
                 H1.push_back(list_points[i]);
-            }   
+            }
             if( s >= 0)
-            {   
+            {
                 draw_point(list_points[i].x, list_points[i].y, sf::Color::Blue);
                 H2.push_back(list_points[i]);
             }
@@ -142,16 +143,17 @@ vector<Point> Meshing::partition_path(std::vector<Point> list_points, bool verti
             xcoord.push_back(list_points[i].y);
         }
      }
-    int n = sizeof(xcoord)/sizeof(xcoord[0]); 
+    int n = sizeof(xcoord)/sizeof(xcoord[0]);
     sort(xcoord.begin(),  xcoord.end());
     float median  = xcoord[xcoord.size()/2];
 
-    
+
     //3d projection
     vector<Point> hull;
     for(int i = 0; i < list_points.size(); i++){
         if(vertical)
         {
+
             proj.push_back(Point(list_points[i].y,pow(list_points[i].x-median, 2) + pow(list_points[i].y,2), list_points[i].index));
         }
         else
@@ -207,11 +209,11 @@ vector<Point> Meshing::partition_path(std::vector<Point> list_points, bool verti
 
     index = hull[hull.size()-1].index;
     index2 = hull[0].index;
-    
+
     if(!old_path.empty()){
         not_in_path =  not_in_vect(old_path, points[index]);
     }
-    
+
     if( vertical == true ){
         if(points[index].y > points[index2].y){
             if(!not_in_path && (points[index].x - tolerance < median &&  points[index].x + tolerance > median )){
@@ -219,10 +221,10 @@ vector<Point> Meshing::partition_path(std::vector<Point> list_points, bool verti
                 path.push_back(points[index]);
             }
             else if (not_in_path){
-            
+
                 draw_line(points[index].x, points[index].y, points[index2].x, points[index2].y, sf::Color::Red);
                 path.push_back(points[index]);
-            
+
             }
         }
     }
@@ -256,7 +258,7 @@ void Meshing::ParDeTri(vector<Point> point_set, vector<Edge> edge_list, vector<T
         edge_list.erase(edge_list.begin()+i);
 
         // make a delaunay triangle
-        index_nearest_point = nearest_point_cpu(point_set, e);
+        index_nearest_point = nearest_point_gpu(point_set, e);
         Triangle t = Triangle(e, point_set[index_nearest_point]);
 
         Edge ep = Edge(e.one, point_set[index_nearest_point]);
@@ -277,7 +279,7 @@ void Meshing::ParDeTri(vector<Point> point_set, vector<Edge> edge_list, vector<T
 
 void update(Edge e, vector<Edge> &edge_list){
     bool find = false;
-    for( int i = 0; i < edge_list.size(); i++){   
+    for( int i = 0; i < edge_list.size(); i++){
         if(e == edge_list[i]){
             edge_list.erase(edge_list.begin()+i);
             return;
@@ -290,7 +292,7 @@ void update(Edge e, vector<Edge> &edge_list){
 // TODO choose vertical/horizontale
 // Now suit with verticale path
 int Meshing::side(Point p, vector<Point> &path, bool vertical){
-    // find segment 
+    // find segment
     if ( vertical == true){
         for(int i = 1; i < path.size(); i++){
 
@@ -300,7 +302,7 @@ int Meshing::side(Point p, vector<Point> &path, bool vertical){
         }
         if( p.y <= path[path.size()-1].y && p.y > path[0].y  && path[path.size()-1].y > path[0].y){
             return  (p.x - path[path.size()-1].x) * (path[0].y - path[path.size()-1].y) -  (p.y- path[path.size()-1].y) * (path[0].x -path[path.size()-1].x);
-        }   
+        }
     }
     else{
         for(int i = 1; i < path.size(); i++){
@@ -334,15 +336,15 @@ int Meshing::nearest_point_cpu(vector<Point> ps, Edge &e){
     #pragma omp parallel
     {
         int loc_index = index_min;
-        float loc_min = min;  
+        float loc_min = min;
         #pragma omp parallel for reduction(min:loc_min)
         for( int i = 0; i < len; i++){
             if( loc_min > dists[i] ){
                 loc_min = dists[i];
                 loc_index  = i;
-            }   
+            }
         }
-        #pragma omp critical 
+        #pragma omp critical
         {
             if (min > loc_min ) {
                 min = loc_min;
@@ -350,10 +352,102 @@ int Meshing::nearest_point_cpu(vector<Point> ps, Edge &e){
             }
         }
     }
-    return index_min;    
+    return index_min;
 }
 
-int Meshing::nearest_point(vector<Point> &ps, Edge &e){ 
+
+
+
+int Meshing::nearest_point_gpu(vector<Point> &ps, Edge &e){
+
+    int count = ps.size();
+    vector<float> px(count), py(count), dists(count, 0xdeadbeef);
+    // fill buffer
+
+    for( int i = 0; i < count; i++){
+        px.push_back(ps[i].x);
+        py.push_back(ps[i].y);
+
+    }
+
+
+    cl_uint deviceIndex = 0;
+    // parseArguments(argc, argv, &deviceIndex);
+
+    // Get list of devices
+    std::vector<cl::Device> devices;
+    unsigned numDevices = getDeviceList(devices);
+
+    // Check device index in range
+    if (deviceIndex >= numDevices)
+    {
+        std::cout << "Invalid device index (try '--list')\n";
+        return EXIT_FAILURE;
+    }
+
+    cl::Device device = devices[deviceIndex];
+
+    std::string name;
+    getDeviceName(device, name);
+    std::cout << "\nUsing OpenCL device: " << name << "\n";
+
+    std::vector<cl::Device> chosen_device;
+    chosen_device.push_back(device);
+    cl::Context context(chosen_device);
+
+    cout << "pas chaud ananas" << endl;
+    cl::Program program(context, util::loadProgram("dists_kernel.cl"), true);
+    cout << "chaud ananas" << endl;
+
+    cl::CommandQueue queue(context);
+
+    // kernel
+    auto dists_kernel = cl::make_kernel<cl::Buffer, cl::Buffer, cl::Buffer, float,  float,  float,  float, int>(program, "dists_kernel");
+
+    cl::Buffer d_px;
+    cl::Buffer d_py;
+    cl::Buffer d_dists;
+
+    d_px = cl::Buffer(context, px.begin(), px.end(), true);
+    d_py = cl::Buffer(context, px.begin(), px.end(), true);
+    d_dists = cl::Buffer(context,  dists.begin(),  dists.end(), true);
+
+
+    dists_kernel(
+            cl::EnqueueArgs(
+                queue,
+                cl::NDRange(count)),
+            d_px,
+            d_py,
+            d_dists,
+            e.one.x,
+            e.one.y,
+            e.two.x,
+            e.two.y,
+            count);
+
+    queue.finish();
+
+
+    float min = 3000000;
+    float dis, min_dis;
+    int index_min = -1;
+    for( int i = 0; i < ps.size(); i++){
+        dis = dists[i];
+        // cout << "dis " << dis << " " << i << endl;
+        if( min > dis){
+            min = dis;
+            index_min  = i;
+            min_dis = dis;
+        }
+    }
+    cout << index_min << endl;
+    // cout << "dis" << index_min << " "  << min_dis << endl;
+    return index_min;
+}
+
+
+int Meshing::nearest_point(vector<Point> &ps, Edge &e){
     float min = MAXFLOAT;
     float dis, min_dis;
     int index_min = -1;
@@ -363,7 +457,7 @@ int Meshing::nearest_point(vector<Point> &ps, Edge &e){
             min = dis;
             index_min  = i;
             min_dis = dis;
-        }   
+        }
     }
     return index_min;
 }
@@ -377,11 +471,11 @@ bool Meshing::is_goodtriangle(vector<Point> &LIST, Point &ps, Edge &e){
             A(0,1) = e.one.y;
             A(0,2) = pow(e.one.x,2) + pow(e.one.y, 2);
             A(0,3) = 1 ;
-            A(1,0) = ps.x; 
+            A(1,0) = ps.x;
             A(1,1) = ps.y;
             A(1,2) = pow(ps.x, 2) + pow(ps.y, 2);
             A(1,3) = 1;
-            A(2,0) = e.two.x; 
+            A(2,0) = e.two.x;
             A(2,1) = e.two.y;
             A(2,2) = pow(e.two.x,2) + pow(e.two.y, 2);
             A(2,3) = 1;
@@ -392,7 +486,7 @@ bool Meshing::is_goodtriangle(vector<Point> &LIST, Point &ps, Edge &e){
             det = A.determinant();
             if(det >0){
                 return false;}
-            
+
         }
         else{
             A(0,0) = e.one.x;
@@ -426,7 +520,7 @@ float dd(Edge e, Point p){
     Vector2f ab = {e.one.x - e.two.x, e.one.y - e.two.y};
     Vector2f ac = {e.one.x - p.x, e.one.y - p.y};
     Vector2f bc = {p.x - e.two.x, p.y - e.two.y};
-    
+
     n_ab = ab.norm();
     n_ac = ac.norm();
     n_bc = bc.norm();
@@ -449,7 +543,7 @@ float dd(Edge e, Point p){
     Point median_e = Point((e.one.x + e.two.x)/2 , (e.one.y + e.two.y)/2);
     Vector2f vect_med_center = {median_e.x - c.x, median_e.y - c.y};
     Vector2f vect_med_p = {median_e.x - p.x, median_e.y - p.y};
-    
+
 
     if(vect_med_center.dot(vect_med_p) < 0){
         return -circumradius;
@@ -521,7 +615,7 @@ float dd2(Edge e, Point p){
     Point median_e = Point((e.one.x + e.two.x)/2 , (e.one.y + e.two.y)/2);
     Vector2f vect_med_center = {median_e.x - c.x, median_e.y - c.y};
     Vector2f vect_med_p = {median_e.x - p.x, median_e.y - p.y};
-    
+
 
     if(vect_med_center.dot(vect_med_p) < 0){
         return -circumradius;
@@ -597,4 +691,3 @@ int points_to_matrix(vector<Point> vect_points){
     }
     return 1;
 }
-

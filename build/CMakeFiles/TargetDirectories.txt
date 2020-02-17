@@ -1,7 +1,0 @@
-/home/polo/work/siam/GPU/gpu_project/build/CMakeFiles/rebuild_cache.dir
-/home/polo/work/siam/GPU/gpu_project/build/CMakeFiles/edit_cache.dir
-/home/polo/work/siam/GPU/gpu_project/build/src/CMakeFiles/rebuild_cache.dir
-/home/polo/work/siam/GPU/gpu_project/build/src/CMakeFiles/performance.dir
-/home/polo/work/siam/GPU/gpu_project/build/src/CMakeFiles/gpu_project.dir
-/home/polo/work/siam/GPU/gpu_project/build/src/CMakeFiles/edit_cache.dir
-/home/polo/work/siam/GPU/gpu_project/build/src/CMakeFiles/triangulation.dir
