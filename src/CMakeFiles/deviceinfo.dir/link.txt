@@ -1,0 +1,1 @@
+/opt/rh/devtoolset-8/root/usr/bin/c++   -fopenmp  -rdynamic CMakeFiles/deviceinfo.dir/deviceinfo.cpp.o  -o /user/0/blancfap/work/gpu_meshing/bin/deviceinfo  -L/user/0/blancfap/work/gpu_meshing/./sfml/lib -Wl,-rpath,/user/0/blancfap/work/gpu_meshing/./sfml/lib -lOpenCL libgpu_project.a -lsfml-graphics -lsfml-window -lsfml-system 

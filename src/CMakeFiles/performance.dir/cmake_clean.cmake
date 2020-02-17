@@ -1,7 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/performance.dir/performance.cpp.o"
-  "../bin/performance.pdb"
-  "../bin/performance"
+  "/user/0/blancfap/work/gpu_meshing/bin/performance.pdb"
+  "/user/0/blancfap/work/gpu_meshing/bin/performance"
 )
 
 # Per-language clean rules from dependency scanning.

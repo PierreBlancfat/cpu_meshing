@@ -13,7 +13,9 @@ include_directories(${EIGEN3_INCLUDE_DIR})
 
 # SFML
 link_directories("./sfml/lib/")
+include_directories("SFML-master/include")
 
+include_directories(utils PUBLIC Common)
 
 # OPENMP
 OPTION (USE_OpenMP "Use OpenMP" ON)

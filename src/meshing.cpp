@@ -1,8 +1,11 @@
 #define __CL_ENABLE_EXCEPTIONS
+#define MAXFLOAT  6666666666
 
 #include "meshing.hpp"
 #include "hull.cpp"
 #include "circumcenter.cpp"
+#include "cl.hpp"
+#include "util.hpp" // utility library
 #include "device_picker.hpp"
 
 using namespace std;
@@ -357,19 +360,22 @@ int Meshing::nearest_point_cpu(vector<Point> ps, Edge &e){
 
 
 
-
+#define LENGTH (1024)  
 int Meshing::nearest_point_gpu(vector<Point> &ps, Edge &e){
 
-    int count = ps.size();
+    // const unsigned int count = ps.size();
+    int count = LENGTH;
     vector<float> px(count), py(count), dists(count, 0xdeadbeef);
     // fill buffer
+    cl::Buffer d_px;
+    cl::Buffer d_py;
+    cl::Buffer d_dists;
 
     for( int i = 0; i < count; i++){
         px.push_back(ps[i].x);
         py.push_back(ps[i].y);
 
     }
-
 
     cl_uint deviceIndex = 0;
     // parseArguments(argc, argv, &deviceIndex);
@@ -396,35 +402,34 @@ int Meshing::nearest_point_gpu(vector<Point> &ps, Edge &e){
     cl::Context context(chosen_device);
 
     cout << "pas chaud ananas" << endl;
-    cl::Program program(context, util::loadProgram("dists_kernel.cl"), true);
-    cout << "chaud ananas" << endl;
+    cl::Program program(context, util::loadProgram("vadd.cl"), true);
 
     cl::CommandQueue queue(context);
 
     // kernel
-    auto dists_kernel = cl::make_kernel<cl::Buffer, cl::Buffer, cl::Buffer, float,  float,  float,  float, int>(program, "dists_kernel");
+    // auto vadd = cl::make_kernel<cl::Buffer, cl::Buffer, cl::Buffer, float,  float,  float,  float, int>(program, "vadd");
+    auto vadd = cl::make_kernel<cl::Buffer, cl::Buffer, cl::Buffer, int>(program, "vadd");
 
-    cl::Buffer d_px;
-    cl::Buffer d_py;
-    cl::Buffer d_dists;
+    cout << "chaud ananas *" << endl;
+
 
     d_px = cl::Buffer(context, px.begin(), px.end(), true);
     d_py = cl::Buffer(context, px.begin(), px.end(), true);
     d_dists = cl::Buffer(context,  dists.begin(),  dists.end(), true);
 
 
-    dists_kernel(
+    vadd(
             cl::EnqueueArgs(
                 queue,
                 cl::NDRange(count)),
             d_px,
             d_py,
             d_dists,
-            e.one.x,
-            e.one.y,
-            e.two.x,
-            e.two.y,
             count);
+            // e.one.x,
+            // e.one.y,
+            // e.two.x,
+            // e.two.y,
 
     queue.finish();
 

@@ -16,3 +16,12 @@ target_link_libraries(triangulation PUBLIC ${OpenCL_LIBRARY})
 
 add_executable(performance performance.cpp)
 target_link_libraries(performance ${OpenCL_LIBRARY}  gpu_project sfml-graphics sfml-window sfml-system)
+
+
+# add_custom_command(TARGET ${EXEC} POST_BUILD
+#                    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+#                        ${CMAKE_CURRENT_SOURCE_DIR}/vadd.cl
+#                        $<TARGET_FILE_DIR:${EXEC}>
+#                    )
+# add_executable(deviceinfo deviceinfo.cpp)
+# target_link_libraries(deviceinfo ${OpenCL_LIBRARY}  gpu_project sfml-graphics sfml-window sfml-system)

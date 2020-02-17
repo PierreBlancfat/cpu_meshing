@@ -1,0 +1,16 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/user/0/blancfap/work/gpu_meshing/src/deviceinfo.cpp
+CL/cl.h
+-
+iostream
+-
+vector
+-
+
