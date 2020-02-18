@@ -69,8 +69,7 @@ int Meshing::triangulation_rec(int nb_partition){
     vector<Triangle>  triangle_list;
     partitionRec(points, path, true, nb_partition,partitions);
 
-    // return 1;
-    #pragma omp parallel for
+    // #pragma omp parallel for
     for( int i = 0; i < partitions.size(); i++)
     {
         ParDeTri(partitions[i].partition, partitions[i].path, triangle_list);
@@ -81,7 +80,6 @@ int Meshing::triangulation_rec(int nb_partition){
         draw_triangle(triangle_list[i]);
     }
 }
-
 
 void Meshing::partitionRec(vector<Point> points_set, vector<Point> old_path, bool vertical, int deph_rec, vector<Partition> &partitions){
     if( deph_rec > 1){
@@ -98,7 +96,53 @@ void Meshing::partitionRec(vector<Point> points_set, vector<Point> old_path, boo
         partitions.push_back(Partition(H1, edge_path));
         partitions.push_back(Partition(H2, edge_path));
     }
+
 }
+
+
+void Meshing::ParDeTri(vector<Point> point_set, vector<Edge> edge_list, vector<Triangle> &triangle_list){
+    int index_nearest_point;
+    int it = 0;
+    int max_it = 50;
+    while( edge_list.size() > 0 && it < max_it){
+        it++;
+        // pop first edge
+        int i = 0;
+        Edge e = Edge(edge_list[i].one, edge_list[i].two);
+        edge_list.erase(edge_list.begin()+i);
+
+        // make a delaunay triangle
+        index_nearest_point = nearest_point_gpu(point_set, e);
+        Triangle t = Triangle(e, point_set[index_nearest_point]);
+
+        Edge ep = Edge(e.one, point_set[index_nearest_point]);
+        Edge ep2 = Edge(e.two, point_set[index_nearest_point]);
+        // point_set.erase(point_set.begin()+index_nearest_point);
+        // Update
+        if(t.is_triangle()){
+            triangle_list.push_back(t);
+            update(ep, edge_list);
+            update(ep2, edge_list);
+        }
+        else
+            cout <<  "not triangle" << endl;
+    }
+    cout <<  "Finished ParDeTri" << endl;
+    return;
+}
+
+void update(Edge e, vector<Edge> &edge_list){
+    bool find = false;
+    for( int i = 0; i < edge_list.size(); i++){
+        if(e == edge_list[i]){
+            edge_list.erase(edge_list.begin()+i);
+            return;
+        }
+    }
+    edge_list.push_back(e);
+}
+
+
 
 
 std::vector<Point> Meshing::partition(std::vector<Point> list_points, vector<Point> &H1, vector<Point> &H2, bool vertical, vector<Point> old_path){
@@ -248,47 +292,8 @@ vector<Point> Meshing::partition_path(std::vector<Point> list_points, bool verti
 }
 
 
-void Meshing::ParDeTri(vector<Point> point_set, vector<Edge> edge_list, vector<Triangle> &triangle_list){
-    int index_nearest_point;
-    int it = 0;
-    int max_it = 50;
-    while( edge_list.size() > 0 && it < max_it){
-        it++;
-        // pop first edge
-        int i = 0;
-        Edge e = Edge(edge_list[i].one, edge_list[i].two);
-        edge_list.erase(edge_list.begin()+i);
 
-        // make a delaunay triangle
-        index_nearest_point = nearest_point_gpu(point_set, e);
-        Triangle t = Triangle(e, point_set[index_nearest_point]);
 
-        Edge ep = Edge(e.one, point_set[index_nearest_point]);
-        Edge ep2 = Edge(e.two, point_set[index_nearest_point]);
-        // point_set.erase(point_set.begin()+index_nearest_point);
-        // Update
-        if(t.is_triangle()){
-            triangle_list.push_back(t);
-            update(ep, edge_list);
-            update(ep2, edge_list);
-        }
-        else
-            cout <<  "not triangle" << endl;
-    }
-    cout <<  "Finished ParDeTri" << endl;
-    return;
-}
-
-void update(Edge e, vector<Edge> &edge_list){
-    bool find = false;
-    for( int i = 0; i < edge_list.size(); i++){
-        if(e == edge_list[i]){
-            edge_list.erase(edge_list.begin()+i);
-            return;
-        }
-    }
-    edge_list.push_back(e);
-}
 
 
 // TODO choose vertical/horizontale
@@ -359,26 +364,21 @@ int Meshing::nearest_point_cpu(vector<Point> ps, Edge &e){
 
 
 
-#define LENGTH (1024)  
+#define LENGTH (1024)
 int Meshing::nearest_point_gpu(vector<Point> &ps, Edge &e){
 
     // const unsigned int count = ps.size();
-    int count = LENGTH;
-    vector<float> px(count), py(count), dists(count, 0xdeadbeef);
+    int count = ps.size();
+    vector<float> px, py, dists(count, 0xdeadbeef);
     // fill buffer
-    cl::Buffer d_px;
-    cl::Buffer d_py;
-    cl::Buffer d_dists;
-    cl::Buffer onex;
-    cl::Buffer oney;
-    cl::Buffer twox;
-    cl::Buffer twoy;
+
 
     for( int i = 0; i < count; i++){
         px.push_back(ps[i].x);
         py.push_back(ps[i].y);
 
     }
+    // cout << (ps[0].x) << " " << px[0]<< endl;
 
     cl_uint deviceIndex = 0;
     // parseArguments(argc, argv, &deviceIndex);
@@ -404,27 +404,35 @@ int Meshing::nearest_point_gpu(vector<Point> &ps, Edge &e){
     chosen_device.push_back(device);
     cl::Context context(chosen_device);
 
-    cout << "pas chaud ananas" << endl;
     cl::Program program(context, util::loadProgram("dists_kernel.cl"), true);
 
     cl::CommandQueue queue(context);
 
     // kernel
-    auto dists_kernel = cl::make_kernel<cl::Buffer, cl::Buffer, cl::Buffer, cl::Buffer,  cl::Buffer,  cl::Buffer,  cl::Buffer, int>(program, "dists_kernel");
-    // auto dists_kernel = cl::make_kernel<cl::Buffer, cl::Buffer, cl::Buffer, int>(program, "dists_kernel");
-
-    cout << "chaud ananas *" << endl;
+    // auto dists_kernel = cl::make_kernel<cl::Buffer, cl::Buffer, cl::Buffer, cl::Buffer, int>(program, "dists_kernel");
+    auto dists_kernel = cl::make_kernel<cl::Buffer, cl::Buffer, cl::Buffer, cl::Buffer,cl::Buffer, cl::Buffer, cl::Buffer, int>(program, "dists_kernel");
 
 
+    cl::Buffer d_px;
+    cl::Buffer d_py;
+    cl::Buffer d_dists;
+    
+    cl::Buffer d_onex(context,CL_MEM_READ_WRITE,sizeof(float));
+    queue.enqueueWriteBuffer(d_onex,CL_TRUE,0,sizeof(int),&e.one.x);
+    
+    cl::Buffer d_oney(context,CL_MEM_READ_WRITE,sizeof(float));
+    queue.enqueueWriteBuffer(d_oney,CL_TRUE,0,sizeof(int),&e.one.y);
+    
+    cl::Buffer d_twox(context,CL_MEM_READ_WRITE,sizeof(float));
+    queue.enqueueWriteBuffer(d_twox,CL_TRUE,0,sizeof(int),&e.two.x);
+    
+    cl::Buffer d_twoy(context,CL_MEM_READ_WRITE,sizeof(float));
+    queue.enqueueWriteBuffer(d_twoy,CL_TRUE,0,sizeof(int),&e.two.y);
+    
     d_px = cl::Buffer(context, px.begin(), px.end(), true);
-    d_py = cl::Buffer(context, px.begin(), px.end(), true);
+    d_py = cl::Buffer(context, py.begin(), py.end(), true);
     d_dists = cl::Buffer(context,  dists.begin(),  dists.end(), true);
-    onex = cl::Buffer(context,  e.one.x, true);
-    oney = cl::Buffer(context,  e.one.y, true);
-    twox = cl::Buffer(context,  e.two.x, true);
-    twoy = cl::Buffer(context,  e.two.y, true);
-
-
+    // d_edge = cl::Buffer(context,  v_edge.begin(),  v_edge.end(), true);
 
     dists_kernel(
             cl::EnqueueArgs(
@@ -433,29 +441,26 @@ int Meshing::nearest_point_gpu(vector<Point> &ps, Edge &e){
             d_px,
             d_py,
             d_dists,
-            onex,
-            oney,
-            twox,
-            twoy,
+            d_onex,
+            d_oney,
+            d_twox,
+            d_twoy,
             count);
 
     queue.finish();
 
-
+    cl::copy(queue, d_dists, dists.begin(), dists.end());
     float min = 3000000;
-    float dis, min_dis;
+    float dis, min_dist;
     int index_min = -1;
     for( int i = 0; i < ps.size(); i++){
-        dis = dists[i];
-        // cout << "dis " << dis << " " << i << endl;
-        if( min > dis){
-            min = dis;
+        if( min > dists[i]){
+            min = dists[i];
             index_min  = i;
-            min_dis = dis;
+            min_dist = dists[i];
         }
     }
-    cout << index_min << endl;
-    // cout << "dis" << index_min << " "  << min_dis << endl;
+    cout << index_min  << " " << min_dist << endl;
     return index_min;
 }
 
@@ -543,10 +548,6 @@ float dd(Edge e, Point p){
 
     circumradius = (n_ab * n_ac * n_bc)/ sqrt((n_ab+n_ac+n_bc)*(n_ac+n_bc-n_ab)*(n_bc+n_ab-n_ac)*(n_ab+n_ac-n_bc));
 
-    float bac = acos(ab.dot(ac)/(n_ab*n_ac));
-    float abc = acos(ab.dot(bc)/(n_ab*n_bc));
-    float bca = acos(ac.dot(-bc)/(n_ac*n_bc));
-    //
 
     pdd A = make_pair(e.one.x, e.one.y);
     pdd B = make_pair(e.two.x, e.two.y);
