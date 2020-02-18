@@ -44,9 +44,9 @@ __kernel void dists_kernel(
     ac_y = *oney - b[i];
     bc_x = a[i] - *twox;
     bc_y = b[i] - *twoy;
-    n_ab = pow(ab_x,2) + pow(ab_y,2);
-    n_ac = pow(ac_x,2) + pow(ac_y,2);
-    n_bc = pow(bc_x,2) + pow(bc_y,2);
+    n_ab = sqrt(pow(ab_x,2) + pow(ab_y,2));
+    n_ac = sqrt(pow(ac_x,2) + pow(ac_y,2));
+    n_bc = sqrt(pow(bc_x,2) + pow(bc_y,2));
 
     dists[i] =  (n_ac * n_ab * n_bc) / sqrt((n_ab+n_ac+n_bc)*(n_ac+n_bc-n_ab)*(n_bc+n_ab-n_ac)*(n_ab+n_ac-n_bc));
 

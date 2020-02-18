@@ -27,7 +27,7 @@ using namespace Eigen;
 Meshing::Meshing(int witdh, int height, sf::RenderWindow  *win ){
     window = win;
     window->setFramerateLimit(1);
-    MatrixXd points_eigen = MatrixXd::Random(200,2)*witdh;
+    MatrixXd points_eigen = MatrixXd::Random(1000000,2)*witdh;
     points_eigen = points_eigen.array().abs();
 
     for(int i = 0; i < points_eigen.rows(); i++){
@@ -398,7 +398,6 @@ int Meshing::nearest_point_gpu(vector<Point> &ps, Edge &e){
 
     std::string name;
     getDeviceName(device, name);
-    std::cout << "\nUsing OpenCL device: " << name << "\n";
 
     std::vector<cl::Device> chosen_device;
     chosen_device.push_back(device);
@@ -434,6 +433,7 @@ int Meshing::nearest_point_gpu(vector<Point> &ps, Edge &e){
     d_dists = cl::Buffer(context,  dists.begin(),  dists.end(), true);
     // d_edge = cl::Buffer(context,  v_edge.begin(),  v_edge.end(), true);
 
+
     dists_kernel(
             cl::EnqueueArgs(
                 queue,
@@ -460,21 +460,19 @@ int Meshing::nearest_point_gpu(vector<Point> &ps, Edge &e){
             min_dist = dists[i];
         }
     }
-    cout << index_min  << " " << min_dist << endl;
     return index_min;
 }
 
 
 int Meshing::nearest_point(vector<Point> &ps, Edge &e){
     float min = MAXFLOAT;
-    float dis, min_dis;
+    float dis;
     int index_min = -1;
     for( int i = 0; i < ps.size(); i++){
         dis = dd(e, ps[i]);
         if( min > dis ){
             min = dis;
             index_min  = i;
-            min_dis = dis;
         }
     }
     return index_min;
@@ -542,9 +540,9 @@ float dd(Edge e, Point p){
     n_ab = ab.norm();
     n_ac = ac.norm();
     n_bc = bc.norm();
-    if (n_ab == 0 || n_ac == 0 || n_bc == 0){
-        return MAXFLOAT;
-    }
+    // if (n_ab == 0 || n_ac == 0 || n_bc == 0){
+    //     return MAXFLOAT;
+    // }
 
     circumradius = (n_ab * n_ac * n_bc)/ sqrt((n_ab+n_ac+n_bc)*(n_ac+n_bc-n_ab)*(n_bc+n_ab-n_ac)*(n_ab+n_ac-n_bc));
 
