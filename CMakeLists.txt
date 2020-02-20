@@ -28,7 +28,6 @@ IF(USE_OpenMP)
 ENDIF()
 
 #OpenCL
-
 # # Recherche le package OpenCL
  find_package(OpenCL REQUIRED)
  if(NOT OPENCL_HAS_CXX)

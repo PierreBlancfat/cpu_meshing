@@ -1,4 +1,4 @@
-# Install script for directory: /user/0/blancfap/work/gpu_meshing
+# Install script for directory: /home/polo/work/siam/GPU/gpu_project
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -29,7 +29,7 @@ endif()
 
 # Install shared libraries without execute permission?
 if(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
-  set(CMAKE_INSTALL_SO_NO_EXE "0")
+  set(CMAKE_INSTALL_SO_NO_EXE "1")
 endif()
 
 # Is this installation the result of a crosscompile?
@@ -39,7 +39,7 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("/user/0/blancfap/work/gpu_meshing/build/src/cmake_install.cmake")
+  include("/home/polo/work/siam/GPU/gpu_project/build/src/cmake_install.cmake")
 
 endif()
 
@@ -51,5 +51,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/user/0/blancfap/work/gpu_meshing/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/polo/work/siam/GPU/gpu_project/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

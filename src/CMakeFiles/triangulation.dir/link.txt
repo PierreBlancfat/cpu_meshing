@@ -1,1 +1,0 @@
-/opt/rh/devtoolset-8/root/usr/bin/c++   -fopenmp  -rdynamic CMakeFiles/triangulation.dir/triangulation.cpp.o  -o /user/0/blancfap/work/gpu_meshing/bin/triangulation  -L/user/0/blancfap/work/gpu_meshing/./sfml/lib -Wl,-rpath,/user/0/blancfap/work/gpu_meshing/./sfml/lib libgpu_project.a -lsfml-graphics -lsfml-window -lsfml-system -lOpenCL 
